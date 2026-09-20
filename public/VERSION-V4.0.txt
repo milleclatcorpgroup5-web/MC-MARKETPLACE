@@ -1,0 +1,15 @@
+M.C Marketplace V4.0 — FRONTEND EASY-FEATURES
+
+Base: V3.11.1 fixed frontend
+Rules: unchanged
+Payment: unchanged/deferred
+wrangler.jsonc: unchanged
+
+Added:
+- Cart quantity +/- controls without changing checkout schema
+- Product share button (Web Share API, clipboard fallback)
+- Recently viewed products using localStorage (no new Firestore writes)
+- Search with Enter key and clearer search title
+- Removed duplicate optionsSelectionnees property in product cart object
+
+No payment provider or Firestore Rules logic was removed or weakened.
