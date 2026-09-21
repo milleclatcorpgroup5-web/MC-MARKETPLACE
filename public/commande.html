@@ -50,12 +50,20 @@
   #success-screen .icon{font-size:44px;margin-bottom:14px;}
   #success-screen a{display:inline-block;margin-top:16px;background:var(--nuit-deep);color:#fff;padding:11px 22px;border-radius:8px;font-weight:700;font-size:13.5px;text-decoration:none;margin-right:8px;}
 </style>
+
 <script src="mc-notifications-v3.3.js"></script>
+
+<!-- Payment foundation V4.0.1 — DISABLED -->
+<script src="mc-payment-config.js"></script>
+
 </head>
+
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <script>
   emailjs.init({ publicKey: "mqvRQnHJ8PfzxfDaI" });
 </script>
+
 <body>
 
 <header>
@@ -64,6 +72,7 @@
 </header>
 
 <main>
+
   <div id="login-needed">
     <p style="margin-bottom:4px;font-weight:600;">Ou dwe konekte anvan ou kòmande</p>
     <p style="font-size:13px;color:var(--gris);">Sa pèmèt nou swiv kòmand ou pou ou.</p>
@@ -71,32 +80,100 @@
   </div>
 
   <div id="checkout-content">
-    <section class="block">
-      <div class="block-head"><h2>Rezime kòmand ou</h2></div>
-      <div id="cart-lines"></div>
-      <div class="cart-total" style="border-bottom:1px solid #eee;"><span>Sou-total</span><span id="cart-subtotal-amount">0 G</span></div>
-      <div class="cart-total" style="font-weight:400;font-size:13px;padding-top:10px;padding-bottom:10px;"><span>Frè livrezon</span><span id="cart-delivery-amount">— antre adrès dabò</span></div>
-      <div class="cart-total" id="coupon-line" style="display:none;font-weight:400;font-size:13px;color:var(--vert);padding-top:0;padding-bottom:10px;"><span id="coupon-label">Rediksyon</span><span id="cart-coupon-amount">-0 G</span></div>
-      <div class="cart-total"><span>Total</span><span id="cart-total-amount">0 G</span></div>
-    </section>
 
     <section class="block">
-      <div class="block-head"><h2>Kòd koupon</h2></div>
-      <div class="addr-form" style="display:flex;gap:8px;">
-        <input id="coupon-input" type="text" placeholder="Antre kòd koupon (opsyonèl)" style="text-transform:uppercase;flex:1;padding:11px 13px;border:1px solid var(--ligne);border-radius:8px;font-size:14px;">
-        <button type="button" onclick="aplikeKoupon()" style="padding:0 18px;border-radius:8px;border:1px solid var(--ligne);background:#fff;font-size:13px;font-weight:600;cursor:pointer;">Aplike</button>
+
+      <div class="block-head">
+        <h2>Rezime kòmand ou</h2>
       </div>
-      <p id="coupon-message" style="font-size:12.5px;margin:8px 18px 14px;"></p>
-    </section>
 
-    <section class="block" style="border-color:#E8B84B;background:#FFF9EC;">
-      <div class="addr-form"><strong>💳 Peman sou entènèt poko aktive</strong><p style="font-size:12.5px;color:var(--gris);margin-top:6px;line-height:1.5;">Konfime kòmand lan kreye yon kòmand trusted ak <b>paymentStatus=pending</b>. Pa gen MonCash, NatCash oswa kat ki debite sou navigatè a nan V3.11.</p></div>
+      <div id="cart-lines"></div>
+
+      <div class="cart-total" style="border-bottom:1px solid #eee;">
+        <span>Sou-total</span>
+        <span id="cart-subtotal-amount">0 G</span>
+      </div>
+
+      <div class="cart-total" style="font-weight:400;font-size:13px;padding-top:10px;padding-bottom:10px;">
+        <span>Frè livrezon</span>
+        <span id="cart-delivery-amount">— antre adrès dabò</span>
+      </div>
+
+      <div class="cart-total"
+           id="coupon-line"
+           style="display:none;font-weight:400;font-size:13px;color:var(--vert);padding-top:0;padding-bottom:10px;">
+        <span id="coupon-label">Rediksyon</span>
+        <span id="cart-coupon-amount">-0 G</span>
+      </div>
+
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cart-total-amount">0 G</span>
+      </div>
+
     </section>
 
     <section class="block">
-      <div class="block-head"><h2>Kote pou livrezon an</h2></div>
+
+      <div class="block-head">
+        <h2>Kòd koupon</h2>
+      </div>
+
+      <div class="addr-form" style="display:flex;gap:8px;">
+
+        <input
+          id="coupon-input"
+          type="text"
+          placeholder="Antre kòd koupon (opsyonèl)"
+          style="text-transform:uppercase;flex:1;padding:11px 13px;border:1px solid var(--ligne);border-radius:8px;font-size:14px;"
+        >
+
+        <button
+          type="button"
+          onclick="aplikeKoupon()"
+          style="padding:0 18px;border-radius:8px;border:1px solid var(--ligne);background:#fff;font-size:13px;font-weight:600;cursor:pointer;"
+        >
+          Aplike
+        </button>
+
+      </div>
+
+      <p id="coupon-message" style="font-size:12.5px;margin:8px 18px 14px;"></p>
+
+    </section>
+
+    <!--
+      PAYMENT FOUNDATION
+      Payment remains DISABLED.
+      No MonCash, NatCash or Card transaction is started here.
+    -->
+    <section class="block" style="border-color:#E8B84B;background:#FFF9EC;">
+
       <div class="addr-form">
+
+        <strong>💳 Fondasyon peman an pare — li dezaktive</strong>
+
+        <p style="font-size:12.5px;color:var(--gris);margin-top:6px;line-height:1.5;">
+          Konfime kòmand lan kreye yon kòmand trusted ak
+          <b>paymentStatus=pending</b>.
+          Fondasyon peman V4.0.1 la pare pou entegrasyon backend pita,
+          men pa gen MonCash, NatCash oswa kat ki aktive kounye a.
+        </p>
+
+      </div>
+
+    </section>
+
+    <section class="block">
+
+      <div class="block-head">
+        <h2>Kote pou livrezon an</h2>
+      </div>
+
+      <div class="addr-form">
+
         <input id="address" type="text" placeholder="Antre adrès ou" required>
+
         <input id="latitude" type="hidden">
         <input id="longitude" type="hidden">
         <input id="gpsAccuracy" type="hidden">
@@ -104,596 +181,2488 @@
         <input id="gpsHeading" type="hidden">
         <input id="gpsSpeed" type="hidden">
         <input id="gpsAddress" type="hidden">
+
         <div class="addr-btns">
-          <button type="button" onclick="rechercherAdresse()">Verifye sou Google Maps</button>
-          <button type="button" onclick="obtenirPosition()">Sèvi ak pozisyon mwen</button>
+
+          <button type="button" onclick="rechercherAdresse()">
+            Verifye sou Google Maps
+          </button>
+
+          <button type="button" onclick="obtenirPosition()">
+            Sèvi ak pozisyon mwen
+          </button>
+
         </div>
+
         <p id="locationMessage" style="font-size:12.5px;color:var(--gris);"></p>
-        <p style="font-size:11.5px;color:var(--gris);margin-top:8px;">💡 Sèvi ak "pozisyon mwen" pou nou ka kalkile frè livrezon selon distans reyèl la — si non, n ap itilize yon pri fiks.</p>
+
+        <p style="font-size:11.5px;color:var(--gris);margin-top:8px;">
+          💡 Sèvi ak "pozisyon mwen" pou nou ka kalkile frè livrezon selon distans reyèl la —
+          si non, n ap itilize yon pri fiks.
+        </p>
+
       </div>
+
     </section>
 
-    <button class="confirm-btn" onclick="confirmerKomand()">Konfime kòmand la</button>
+    <button class="confirm-btn" onclick="confirmerKomand()">
+      Konfime kòmand la
+    </button>
+
   </div>
 
   <div id="success-screen">
+
     <div class="icon">✅</div>
+
     <h2>Kòmand ou konfime!</h2>
-    <p style="color:var(--gris);font-size:14px;margin-top:8px;">Vandè a pral resevwa kòmand ou. Ou ka swiv li nan kont ou.</p>
-    <p id="points-earned-msg" style="color:#B8902E;font-weight:700;font-size:13.5px;margin-top:10px;"></p>
+
+    <p style="color:var(--gris);font-size:14px;margin-top:8px;">
+      Vandè a pral resevwa kòmand ou. Ou ka swiv li nan kont ou.
+    </p>
+
+    <p
+      id="points-earned-msg"
+      style="color:#B8902E;font-weight:700;font-size:13.5px;margin-top:10px;"
+    ></p>
+
     <div>
-      <a href="index.html">Retounen nan boutik la</a>
-      <a href="compte.html">Swiv kòmand mwen</a>
+
+      <a href="index.html">
+        Retounen nan boutik la
+      </a>
+
+      <a href="compte.html">
+        Swiv kòmand mwen
+      </a>
+
     </div>
+
   </div>
+
 </main>
 
 <script>
-function rechercherAdresse() {
-  const address = document.getElementById("address").value;
-  if (!address) { alert("Antre yon adrès dabò."); return; }
-  const url = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
-  window.open(url, "_blank");
-}
 
-async function obtenirPosition(options = {}) {
-  const automatique = options.auto === true;
-  const message = document.getElementById("locationMessage");
-  const button = [...document.querySelectorAll('.addr-btns button')].find(b => b.textContent.includes('pozisyon mwen'));
-  if (!window.MCGPS) {
-    message.textContent = "GPS pa chaje. Rafrechi paj la epi eseye ankò.";
+function rechercherAdresse() {
+
+  const address = document.getElementById("address").value;
+
+  if (!address) {
+    alert("Antre yon adrès dabò.");
     return;
   }
 
-  if (button) { button.disabled = true; button.textContent = "⏳ N ap chèche GPS..."; }
+  const url =
+    "https://www.google.com/maps/search/?api=1&query=" +
+    encodeURIComponent(address);
+
+  window.open(url, "_blank");
+}
+
+
+async function obtenirPosition(options = {}) {
+
+  const automatique = options.auto === true;
+
+  const message =
+    document.getElementById("locationMessage");
+
+  const button =
+    [...document.querySelectorAll('.addr-btns button')]
+      .find(b => b.textContent.includes('pozisyon mwen'));
+
+  if (!window.MCGPS) {
+
+    message.textContent =
+      "GPS pa chaje. Rafrechi paj la epi eseye ankò.";
+
+    return;
+  }
+
+  if (button) {
+
+    button.disabled = true;
+    button.textContent = "⏳ N ap chèche GPS...";
+
+  }
+
   message.innerHTML = automatique
     ? "📍 N ap jwenn pozisyon ou otomatikman... <br><small>Sa ap itilize pozisyon aparèy la pou kalkile livrezon an.</small>"
     : "📍 N ap chèche pozisyon GPS ki pi presi a... <br><small>Sa ka pran kèk segonn.</small>";
 
   try {
+
     let gps;
+
     try {
-      gps = await MCGPS.locateDetailed({enableHighAccuracy:true, timeout:20000, maximumAge:3000});
+
+      gps = await MCGPS.locateDetailed({
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 3000
+      });
+
     } catch (firstError) {
-      // Si GPS wo-presizyon an timeout/echwe, fè yon dezyèm tantativ pi toleran.
-      if (firstError && (firstError.code === 1 || firstError.message === 'PERMISSION_DENIED')) throw firstError;
-      message.innerHTML = "📍 Premye tantativ la pa jwenn GPS la. N ap fè yon dezyèm tantativ...";
-      gps = await MCGPS.locateDetailed({enableHighAccuracy:false, timeout:10000, maximumAge:15000});
+
+      if (
+        firstError &&
+        (
+          firstError.code === 1 ||
+          firstError.message === 'PERMISSION_DENIED'
+        )
+      ) {
+        throw firstError;
+      }
+
+      message.innerHTML =
+        "📍 Premye tantativ la pa jwenn GPS la. N ap fè yon dezyèm tantativ...";
+
+      gps = await MCGPS.locateDetailed({
+        enableHighAccuracy: false,
+        timeout: 10000,
+        maximumAge: 15000
+      });
+
     }
 
     document.getElementById("latitude").value = gps.lat;
     document.getElementById("longitude").value = gps.lng;
-    document.getElementById("gpsAccuracy").value = gps.accuracy ?? '';
-    document.getElementById("gpsAltitude").value = gps.altitude ?? '';
-    document.getElementById("gpsHeading").value = gps.heading ?? '';
-    document.getElementById("gpsSpeed").value = gps.speed ?? '';
-    document.getElementById("gpsAddress").value = gps.address?.fullAddress || '';
 
-    const detailed = MCGPS.formatAddress(gps);
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${gps.lat},${gps.lng}`;
-    message.innerHTML = `📍 ${detailed}<br><strong>${MCGPS.accuracyLabel(gps.accuracy)}</strong> · <a href="${mapsUrl}" target="_blank" rel="noopener">Verifye sou Google Maps</a>`;
+    document.getElementById("gpsAccuracy").value =
+      gps.accuracy ?? '';
 
-    const addr = document.getElementById('address');
-    if (addr && !addr.value && gps.address?.fullAddress) addr.value = gps.address.fullAddress;
-    if (window.calculateDeliveryFee) window.calculateDeliveryFee();
-  } catch (e) {
-    console.error('GPS checkout error:', e);
-    let detail = 'Nou pa kapab jwenn pozisyon an kounye a.';
-    if (e?.code === 1 || e?.message === 'PERMISSION_DENIED') {
-      detail = 'Lokalisasyon an refize. Nan Chrome, ale nan 🔒 → Permissions/Site settings → Location → Allow, epi verifye Location aktive sou telefòn/tablet la.';
-    } else if (e?.code === 2 || e?.message === 'POSITION_UNAVAILABLE') {
-      detail = 'GPS la pa disponib. Aktive Location/GPS, soti deyò oswa bò fenèt, epi eseye ankò.';
-    } else if (e?.code === 3 || e?.message === 'TIMEOUT') {
-      detail = 'GPS la pa jwenn yon pozisyon ase vit. Kite Location/GPS aktive, rete bò fenèt oswa deyò, epi tann kèk segonn anvan peze ankò.';
+    document.getElementById("gpsAltitude").value =
+      gps.altitude ?? '';
+
+    document.getElementById("gpsHeading").value =
+      gps.heading ?? '';
+
+    document.getElementById("gpsSpeed").value =
+      gps.speed ?? '';
+
+    document.getElementById("gpsAddress").value =
+      gps.address?.fullAddress || '';
+
+    const detailed =
+      MCGPS.formatAddress(gps);
+
+    const mapsUrl =
+      `https://www.google.com/maps/search/?api=1&query=${gps.lat},${gps.lng}`;
+
+    message.innerHTML =
+      `📍 ${detailed}<br><strong>${MCGPS.accuracyLabel(gps.accuracy)}</strong> · <a href="${mapsUrl}" target="_blank" rel="noopener">Verifye sou Google Maps</a>`;
+
+    const addr =
+      document.getElementById('address');
+
+    if (
+      addr &&
+      !addr.value &&
+      gps.address?.fullAddress
+    ) {
+      addr.value =
+        gps.address.fullAddress;
     }
-    message.innerHTML = `⚠️ ${detail}<br><small>Ou ka antre adrès la manyèlman si ou pa vle itilize GPS.</small>`;
+
+    if (window.calculateDeliveryFee) {
+      window.calculateDeliveryFee();
+    }
+
+  } catch (e) {
+
+    console.error(
+      'GPS checkout error:',
+      e
+    );
+
+    let detail =
+      'Nou pa kapab jwenn pozisyon an kounye a.';
+
+    if (
+      e?.code === 1 ||
+      e?.message === 'PERMISSION_DENIED'
+    ) {
+
+      detail =
+        'Lokalisasyon an refize. Nan Chrome, ale nan 🔒 → Permissions/Site settings → Location → Allow, epi verifye Location aktive sou telefòn/tablet la.';
+
+    } else if (
+      e?.code === 2 ||
+      e?.message === 'POSITION_UNAVAILABLE'
+    ) {
+
+      detail =
+        'GPS la pa disponib. Aktive Location/GPS, soti deyò oswa bò fenèt, epi eseye ankò.';
+
+    } else if (
+      e?.code === 3 ||
+      e?.message === 'TIMEOUT'
+    ) {
+
+      detail =
+        'GPS la pa jwenn yon pozisyon ase vit. Kite Location/GPS aktive, rete bò fenèt oswa deyò, epi tann kèk segonn anvan peze ankò.';
+
+    }
+
+    message.innerHTML =
+      `⚠️ ${detail}<br><small>Ou ka antre adrès la manyèlman si ou pa vle itilize GPS.</small>`;
+
   } finally {
-    if (button) { button.disabled = false; button.textContent = "Sèvi ak pozisyon mwen"; }
+
+    if (button) {
+
+      button.disabled = false;
+      button.textContent =
+        "Sèvi ak pozisyon mwen";
+
+    }
+
   }
+
 }
+
 </script>
 
 <script src="gps-utils.js"></script>
+
 <script type="module">
+
 const firebaseConfig = {
+
   apiKey: "AIzaSyB_1RmQ3t-8Zzpg-mirSCv59KrioDsmjT8",
-  authDomain: "mc-marketplaceht.firebaseapp.com",
-  projectId: "mc-marketplaceht",
-  storageBucket: "mc-marketplaceht.firebasestorage.app",
-  messagingSenderId: "788708293876",
-  appId: "1:788708293876:web:09922c1e17ed6f51a2b2a1"
+
+  authDomain:
+    "mc-marketplaceht.firebaseapp.com",
+
+  projectId:
+    "mc-marketplaceht",
+
+  storageBucket:
+    "mc-marketplaceht.firebasestorage.app",
+
+  messagingSenderId:
+    "788708293876",
+
+  appId:
+    "1:788708293876:web:09922c1e17ed6f51a2b2a1"
+
 };
 
-const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-const { getAuth, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
-const { getFirestore, doc, getDoc, collection, addDoc, setDoc, runTransaction, updateDoc, increment } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const {
+  initializeApp
+} =
+  await import(
+    "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"
+  );
+
+
+const {
+  getAuth,
+  onAuthStateChanged
+} =
+  await import(
+    "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"
+  );
+
+
+const {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  setDoc,
+  runTransaction,
+  updateDoc,
+  increment
+} =
+  await import(
+    "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+  );
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+const db =
+  getFirestore(app);
+
 
 let currentUser = null;
+
 let currentClientNom = '';
-let cart = JSON.parse(localStorage.getItem('mc_cart') || '[]');
+
+let cart =
+  JSON.parse(
+    localStorage.getItem('mc_cart') || '[]'
+  );
+
+
+// Payment foundation safety check.
+// This MUST remain disabled until a real backend/provider
+// integration is implemented and tested.
+const paymentFoundation =
+  window.MCPayment || null;
+
+const paymentInitialState =
+  paymentFoundation &&
+  typeof paymentFoundation.getInitialPaymentState === 'function'
+    ? paymentFoundation.getInitialPaymentState()
+    : {
+        paymentStatus: 'pending',
+        paymentProvider: null,
+        paymentReference: null,
+        paymentTransactionId: null,
+        paymentUpdatedAt: null
+      };
+
 
 // Normalise les anciens paniers : les lignes identiques deviennent une seule ligne avec quantite.
 function normalizeCartQuantities(items){
+
   const groups = new Map();
-  for (const raw of Array.isArray(items) ? items : []) {
+
+  for (
+    const raw of Array.isArray(items)
+      ? items
+      : []
+  ) {
+
     const item = {...raw};
-    const q = Math.max(1, Number(item.quantite || 1));
-    const key = JSON.stringify([item.id || null, item.optionsSelectionnees || []]);
-    if (!groups.has(key)) groups.set(key, {...item, quantite:q});
-    else groups.get(key).quantite += q;
+
+    const q =
+      Math.max(
+        1,
+        Number(item.quantite || 1)
+      );
+
+    const key =
+      JSON.stringify([
+        item.id || null,
+        item.optionsSelectionnees || []
+      ]);
+
+    if (!groups.has(key)) {
+
+      groups.set(
+        key,
+        {
+          ...item,
+          quantite:q
+        }
+      );
+
+    } else {
+
+      groups.get(key).quantite += q;
+
+    }
+
   }
-  return [...groups.values()];
+
+  return [
+    ...groups.values()
+  ];
+
 }
-cart = normalizeCartQuantities(cart);
-localStorage.setItem('mc_cart', JSON.stringify(cart));
+
+
+cart =
+  normalizeCartQuantities(cart);
+
+localStorage.setItem(
+  'mc_cart',
+  JSON.stringify(cart)
+);
+
 
 async function chargerPositionClientEnregistree(clientData) {
-  if (!clientData || clientData.lat == null || clientData.lng == null) return false;
-  const lat = Number(clientData.lat), lng = Number(clientData.lng);
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return false;
-  document.getElementById("latitude").value = lat;
-  document.getElementById("longitude").value = lng;
-  document.getElementById("gpsAccuracy").value = clientData.gpsAccuracy ?? "";
-  document.getElementById("gpsAltitude").value = clientData.gpsAltitude ?? "";
-  document.getElementById("gpsHeading").value = clientData.gpsHeading ?? "";
-  document.getElementById("gpsSpeed").value = clientData.gpsSpeed ?? "";
-  document.getElementById("gpsAddress").value = clientData.gpsAddress || "";
-  const parts = [clientData.gpsStreet, clientData.gpsNeighborhood, clientData.gpsCity, clientData.gpsDepartment, clientData.gpsCountry].filter(Boolean);
-  const address = clientData.gpsAddress || parts.join(" · ");
-  if (address && !document.getElementById("address").value) document.getElementById("address").value = address;
-  const msg = document.getElementById("locationMessage");
-  msg.innerHTML = `📍 Pozisyon an deja anrejistre: ${address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`}<br><small>Nou pral verifye li otomatikman ak GPS aktyèl la.</small>`;
+
+  if (
+    !clientData ||
+    clientData.lat == null ||
+    clientData.lng == null
+  ) {
+    return false;
+  }
+
+  const lat =
+    Number(clientData.lat);
+
+  const lng =
+    Number(clientData.lng);
+
+  if (
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lng)
+  ) {
+    return false;
+  }
+
+  document.getElementById("latitude").value =
+    lat;
+
+  document.getElementById("longitude").value =
+    lng;
+
+  document.getElementById("gpsAccuracy").value =
+    clientData.gpsAccuracy ?? "";
+
+  document.getElementById("gpsAltitude").value =
+    clientData.gpsAltitude ?? "";
+
+  document.getElementById("gpsHeading").value =
+    clientData.gpsHeading ?? "";
+
+  document.getElementById("gpsSpeed").value =
+    clientData.gpsSpeed ?? "";
+
+  document.getElementById("gpsAddress").value =
+    clientData.gpsAddress || "";
+
+  const parts = [
+    clientData.gpsStreet,
+    clientData.gpsNeighborhood,
+    clientData.gpsCity,
+    clientData.gpsDepartment,
+    clientData.gpsCountry
+  ].filter(Boolean);
+
+  const address =
+    clientData.gpsAddress ||
+    parts.join(" · ");
+
+  if (
+    address &&
+    !document.getElementById("address").value
+  ) {
+    document.getElementById("address").value =
+      address;
+  }
+
+  const msg =
+    document.getElementById("locationMessage");
+
+  msg.innerHTML =
+    `📍 Pozisyon an deja anrejistre: ${address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`}<br><small>Nou pral verifye li otomatikman ak GPS aktyèl la.</small>`;
+
   await calculateDeliveryFee();
+
   return true;
 }
 
+
 async function demareGPSOtomatik(clientData) {
-  // Pozisyon ki te sove a rann checkout la rapid menm anvan nouvo GPS fix la rive.
-  await chargerPositionClientEnregistree(clientData);
-  // Apre sa, eseye pran pozisyon aktyèl la san itilizatè a bezwen peze bouton an.
-  setTimeout(() => obtenirPosition({auto:true}), 350);
+
+  await chargerPositionClientEnregistree(
+    clientData
+  );
+
+  setTimeout(
+    () => obtenirPosition({auto:true}),
+    350
+  );
+
 }
 
-onAuthStateChanged(auth, async (user)=>{
-  if (!user) {
-    document.getElementById('login-needed').style.display = 'block';
-    document.getElementById('checkout-content').style.display = 'none';
-    return;
+
+onAuthStateChanged(
+  auth,
+  async (user)=>{
+
+    if (!user) {
+
+      document.getElementById(
+        'login-needed'
+      ).style.display =
+        'block';
+
+      document.getElementById(
+        'checkout-content'
+      ).style.display =
+        'none';
+
+      return;
+    }
+
+    currentUser =
+      user;
+
+    const clientDoc =
+      await getDoc(
+        doc(
+          db,
+          "clients",
+          user.uid
+        )
+      );
+
+    const clientData =
+      clientDoc.exists()
+        ? clientDoc.data()
+        : {};
+
+    currentClientNom =
+      clientData.nom ||
+      user.email;
+
+    document.getElementById(
+      'login-needed'
+    ).style.display =
+      'none';
+
+
+    if (cart.length === 0) {
+
+      document.getElementById(
+        'checkout-content'
+      ).innerHTML =
+        '<div style="text-align:center;padding:40px 0;color:var(--gris);">Panye ou vid. <a href="index.html" style="color:var(--corail);font-weight:600;">Retounen achte</a></div>';
+
+      document.getElementById(
+        'checkout-content'
+      ).style.display =
+        'block';
+
+      return;
+    }
+
+
+    document.getElementById(
+      'checkout-content'
+    ).style.display =
+      'block';
+
+
+    renderCartSummary();
+
+    calculateDeliveryFee();
+
+
+    demareGPSOtomatik(
+      clientData
+    );
+
   }
-  currentUser = user;
-  const clientDoc = await getDoc(doc(db, "clients", user.uid));
-  const clientData = clientDoc.exists() ? clientDoc.data() : {};
-  currentClientNom = clientData.nom || user.email;
+);
 
-  document.getElementById('login-needed').style.display = 'none';
-
-  if (cart.length === 0) {
-    document.getElementById('checkout-content').innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--gris);">Panye ou vid. <a href="index.html" style="color:var(--corail);font-weight:600;">Retounen achte</a></div>';
-    document.getElementById('checkout-content').style.display = 'block';
-    return;
-  }
-
-  document.getElementById('checkout-content').style.display = 'block';
-  renderCartSummary();
-  calculateDeliveryFee();
-  // GPS otomatik: si kliyan an deja bay pèmisyon, pozisyon an ka jwenn san klik.
-  // Premye fwa a, Chrome/Android ka montre demann pèmisyon Location.
-  demareGPSOtomatik(clientData);
-});
 
 function renderCartSummary(){
-  const linesEl = document.getElementById('cart-lines');
-  linesEl.innerHTML = cart.map(item => `
-    <div class="cart-line"><span>${item.nom} × ${Math.max(1, Number(item.quantite || 1))}</span><span>${(Number(item.prix) * Math.max(1, Number(item.quantite || 1))).toLocaleString('fr-FR')} G</span></div>
-  `).join('');
-  const subtotal = cart.reduce((sum,item)=> sum + Number(item.prix) * Math.max(1, Number(item.quantite || 1)), 0);
-  document.getElementById('cart-subtotal-amount').textContent = subtotal.toLocaleString('fr-FR') + ' G';
+
+  const linesEl =
+    document.getElementById(
+      'cart-lines'
+    );
+
+  linesEl.innerHTML =
+    cart.map(
+      item => `
+        <div class="cart-line">
+          <span>
+            ${item.nom} × ${Math.max(
+              1,
+              Number(item.quantite || 1)
+            )}
+          </span>
+
+          <span>
+            ${(Number(item.prix) *
+              Math.max(
+                1,
+                Number(item.quantite || 1)
+              )
+            ).toLocaleString('fr-FR')} G
+          </span>
+        </div>
+      `
+    ).join('');
+
+
+  const subtotal =
+    cart.reduce(
+      (sum,item)=>
+        sum +
+        Number(item.prix) *
+        Math.max(
+          1,
+          Number(item.quantite || 1)
+        ),
+      0
+    );
+
+
+  document.getElementById(
+    'cart-subtotal-amount'
+  ).textContent =
+    subtotal.toLocaleString('fr-FR') +
+    ' G';
+
+
   updateTotalWithDelivery();
+
 }
 
-function haversineKm(lat1, lng1, lat2, lng2){
+
+function haversineKm(
+  lat1,
+  lng1,
+  lat2,
+  lng2
+){
+
   const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  const dLat =
+    (lat2 - lat1) *
+    Math.PI / 180;
+
+  const dLng =
+    (lng2 - lng1) *
+    Math.PI / 180;
+
+  const a =
+    Math.sin(dLat/2)**2 +
+    Math.cos(
+      lat1*Math.PI/180
+    ) *
+    Math.cos(
+      lat2*Math.PI/180
+    ) *
+    Math.sin(dLng/2)**2;
+
+  return R *
+    2 *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1-a)
+    );
+
 }
 
-let cachedDeliveryFee = null;
+
+let cachedDeliveryFee =
+  null;
+
 
 async function calculateDeliveryFee(){
-  const latitude = document.getElementById('latitude').value;
-  const longitude = document.getElementById('longitude').value;
-  const deliveryEl = document.getElementById('cart-delivery-amount');
 
-  let baseFee = 150, feePerKm = 25;
+  const latitude =
+    document.getElementById(
+      'latitude'
+    ).value;
+
+  const longitude =
+    document.getElementById(
+      'longitude'
+    ).value;
+
+  const deliveryEl =
+    document.getElementById(
+      'cart-delivery-amount'
+    );
+
+
+  let baseFee = 150;
+  let feePerKm = 25;
+
+
   try {
-    const paramSnap = await getDoc(doc(db, "parametres", "plateforme"));
+
+    const paramSnap =
+      await getDoc(
+        doc(
+          db,
+          "parametres",
+          "plateforme"
+        )
+      );
+
     if (paramSnap.exists()) {
-      const p = paramSnap.data();
-      if (p.livraisonBaseHTG != null) baseFee = Number(p.livraisonBaseHTG);
-      if (p.livraisonParKmHTG != null) feePerKm = Number(p.livraisonParKmHTG);
+
+      const p =
+        paramSnap.data();
+
+      if (
+        p.livraisonBaseHTG != null
+      ) {
+        baseFee =
+          Number(
+            p.livraisonBaseHTG
+          );
+      }
+
+      if (
+        p.livraisonParKmHTG != null
+      ) {
+        feePerKm =
+          Number(
+            p.livraisonParKmHTG
+          );
+      }
+
     }
+
   } catch(e) {}
 
-  if (!latitude || !longitude) {
-    cachedDeliveryFee = baseFee;
-    deliveryEl.textContent = baseFee.toLocaleString('fr-FR') + ' G (pri fiks)';
+
+  if (
+    !latitude ||
+    !longitude
+  ) {
+
+    cachedDeliveryFee =
+      baseFee;
+
+    deliveryEl.textContent =
+      baseFee.toLocaleString(
+        'fr-FR'
+      ) +
+      ' G (pri fiks)';
+
     updateTotalWithDelivery();
+
     return;
   }
 
-  // Kalkile distans pou chak vandè epi pran pi gwo distans lan (ka gen plizyè boutik)
+
   let maxDistance = 0;
-  let hasVendorLocation = false;
-  const uniqueVendorIds = [...new Set(cart.map(i => i.vendeurId).filter(Boolean))];
-  for (const vendeurId of uniqueVendorIds) {
+
+  let hasVendorLocation =
+    false;
+
+
+  const uniqueVendorIds =
+    [
+      ...new Set(
+        cart
+          .map(
+            i => i.vendeurId
+          )
+          .filter(Boolean)
+      )
+    ];
+
+
+  for (
+    const vendeurId
+    of uniqueVendorIds
+  ) {
+
     try {
-      const vSnap = await getDoc(doc(db, "vendeurs_public", vendeurId));
-      if (vSnap.exists() && vSnap.data().lat && vSnap.data().lng) {
-        hasVendorLocation = true;
-        const d = haversineKm(Number(latitude), Number(longitude), vSnap.data().lat, vSnap.data().lng);
-        if (d > maxDistance) maxDistance = d;
+
+      const vSnap =
+        await getDoc(
+          doc(
+            db,
+            "vendeurs_public",
+            vendeurId
+          )
+        );
+
+
+      if (
+        vSnap.exists() &&
+        vSnap.data().lat &&
+        vSnap.data().lng
+      ) {
+
+        hasVendorLocation =
+          true;
+
+        const d =
+          haversineKm(
+            Number(latitude),
+            Number(longitude),
+            vSnap.data().lat,
+            vSnap.data().lng
+          );
+
+        if (
+          d > maxDistance
+        ) {
+          maxDistance = d;
+        }
+
       }
+
     } catch(e) {}
+
   }
+
 
   if (!hasVendorLocation) {
-    cachedDeliveryFee = baseFee;
-    deliveryEl.textContent = baseFee.toLocaleString('fr-FR') + ' G (pri fiks)';
+
+    cachedDeliveryFee =
+      baseFee;
+
+    deliveryEl.textContent =
+      baseFee.toLocaleString(
+        'fr-FR'
+      ) +
+      ' G (pri fiks)';
+
   } else {
-    const fee = Math.round(baseFee + maxDistance * feePerKm);
-    cachedDeliveryFee = fee;
-    deliveryEl.textContent = fee.toLocaleString('fr-FR') + ' G (' + maxDistance.toFixed(1) + ' km)';
+
+    const fee =
+      Math.round(
+        baseFee +
+        maxDistance *
+        feePerKm
+      );
+
+    cachedDeliveryFee =
+      fee;
+
+    deliveryEl.textContent =
+      fee.toLocaleString(
+        'fr-FR'
+      ) +
+      ' G (' +
+      maxDistance.toFixed(1) +
+      ' km)';
+
   }
+
+
   updateTotalWithDelivery();
+
 }
 
-let appliedCoupon = null;
+
+let appliedCoupon =
+  null;
+
 
 function updateTotalWithDelivery(){
-  const subtotal = cart.reduce((sum,item)=> sum + Number(item.prix) * Math.max(1, Number(item.quantite || 1)), 0);
-  const delivery = cachedDeliveryFee || 0;
-  const discount = appliedCoupon ? appliedCoupon.montant : 0;
-  const total = Math.max(0, subtotal + delivery - discount);
-  document.getElementById('cart-total-amount').textContent = total.toLocaleString('fr-FR') + ' G';
+
+  const subtotal =
+    cart.reduce(
+      (sum,item)=>
+        sum +
+        Number(item.prix) *
+        Math.max(
+          1,
+          Number(item.quantite || 1)
+        ),
+      0
+    );
+
+
+  const delivery =
+    cachedDeliveryFee ||
+    0;
+
+
+  const discount =
+    appliedCoupon
+      ? appliedCoupon.montant
+      : 0;
+
+
+  const total =
+    Math.max(
+      0,
+      subtotal +
+      delivery -
+      discount
+    );
+
+
+  document.getElementById(
+    'cart-total-amount'
+  ).textContent =
+    total.toLocaleString(
+      'fr-FR'
+    ) +
+    ' G';
+
 }
-window.calculateDeliveryFee = calculateDeliveryFee;
 
-window.aplikeKoupon = async function(){
-  const code = document.getElementById('coupon-input').value.trim().toUpperCase();
-  const msgEl = document.getElementById('coupon-message');
-  msgEl.style.color = 'var(--corail)';
-  if (!code) { msgEl.textContent = 'Antre yon kòd koupon.'; return; }
 
-  try {
-    const snap = await getDoc(doc(db, "coupons", code));
-    if (!snap.exists() || !snap.data().actif) {
-      msgEl.textContent = 'Kòd koupon sa a pa valid.';
-      appliedCoupon = null;
-      document.getElementById('coupon-line').style.display = 'none';
+window.calculateDeliveryFee =
+  calculateDeliveryFee;
+
+
+window.aplikeKoupon =
+  async function(){
+
+    const code =
+      document.getElementById(
+        'coupon-input'
+      ).value
+      .trim()
+      .toUpperCase();
+
+
+    const msgEl =
+      document.getElementById(
+        'coupon-message'
+      );
+
+
+    msgEl.style.color =
+      'var(--corail)';
+
+
+    if (!code) {
+
+      msgEl.textContent =
+        'Antre yon kòd koupon.';
+
+      return;
+    }
+
+
+    try {
+
+      const snap =
+        await getDoc(
+          doc(
+            db,
+            "coupons",
+            code
+          )
+        );
+
+
+      if (
+        !snap.exists() ||
+        !snap.data().actif
+      ) {
+
+        msgEl.textContent =
+          'Kòd koupon sa a pa valid.';
+
+        appliedCoupon =
+          null;
+
+        document.getElementById(
+          'coupon-line'
+        ).style.display =
+          'none';
+
+        updateTotalWithDelivery();
+
+        return;
+      }
+
+
+      const c =
+        snap.data();
+
+
+      const subtotal =
+        cart.reduce(
+          (sum,item)=>
+            sum +
+            Number(item.prix) *
+            Math.max(
+              1,
+              Number(item.quantite || 1)
+            ),
+          0
+        );
+
+
+      if (
+        c.dateExpiration &&
+        new Date(c.dateExpiration) <
+        new Date()
+      ) {
+
+        msgEl.textContent =
+          'Koupon sa a ekspire.';
+
+        return;
+      }
+
+
+      if (
+        c.montantMinimum &&
+        subtotal <
+        c.montantMinimum
+      ) {
+
+        msgEl.textContent =
+          `Ou bezwen depanse omwen ${c.montantMinimum.toLocaleString('fr-FR')} G pou itilize koupon sa a.`;
+
+        return;
+      }
+
+
+      if (
+        c.utilisationsMax &&
+        (
+          c.utilisationsActuelles ||
+          0
+        ) >=
+        c.utilisationsMax
+      ) {
+
+        msgEl.textContent =
+          'Koupon sa a fin itilize.';
+
+        return;
+      }
+
+
+      const rawDiscount =
+        c.type === 'pourcentage'
+          ? Math.round(
+              subtotal *
+              (
+                Number(c.valeur) /
+                100
+              )
+            )
+          : Number(c.valeur);
+
+
+      const montant =
+        Math.min(
+          subtotal,
+          Math.max(
+            0,
+            Number.isFinite(
+              rawDiscount
+            )
+              ? rawDiscount
+              : 0
+          )
+        );
+
+
+      appliedCoupon = {
+        code,
+        montant
+      };
+
+
+      document.getElementById(
+        'coupon-line'
+      ).style.display =
+        'flex';
+
+
+      document.getElementById(
+        'coupon-label'
+      ).textContent =
+        `Koupon ${code}`;
+
+
+      document.getElementById(
+        'cart-coupon-amount'
+      ).textContent =
+        '-' +
+        montant.toLocaleString(
+          'fr-FR'
+        ) +
+        ' G';
+
+
+      msgEl.style.color =
+        'var(--vert)';
+
+      msgEl.textContent =
+        '✓ Koupon aplike!';
+
+
       updateTotalWithDelivery();
-      return;
-    }
-    const c = snap.data();
-    const subtotal = cart.reduce((sum,item)=> sum + Number(item.prix) * Math.max(1, Number(item.quantite || 1)), 0);
 
-    if (c.dateExpiration && new Date(c.dateExpiration) < new Date()) {
-      msgEl.textContent = 'Koupon sa a ekspire.'; return;
-    }
-    if (c.montantMinimum && subtotal < c.montantMinimum) {
-      msgEl.textContent = `Ou bezwen depanse omwen ${c.montantMinimum.toLocaleString('fr-FR')} G pou itilize koupon sa a.`;
-      return;
-    }
-    if (c.utilisationsMax && (c.utilisationsActuelles || 0) >= c.utilisationsMax) {
-      msgEl.textContent = 'Koupon sa a fin itilize.'; return;
+
+    } catch(e) {
+
+      msgEl.textContent =
+        'Kòd koupon sa a pa valid.';
+
     }
 
-    const rawDiscount = c.type === 'pourcentage' ? Math.round(subtotal * (Number(c.valeur) / 100)) : Number(c.valeur);
-    const montant = Math.min(subtotal, Math.max(0, Number.isFinite(rawDiscount) ? rawDiscount : 0));
-    appliedCoupon = { code, montant };
-    document.getElementById('coupon-line').style.display = 'flex';
-    document.getElementById('coupon-label').textContent = `Koupon ${code}`;
-    document.getElementById('cart-coupon-amount').textContent = '-' + montant.toLocaleString('fr-FR') + ' G';
-    msgEl.style.color = 'var(--vert)';
-    msgEl.textContent = '✓ Koupon aplike!';
-    updateTotalWithDelivery();
-  } catch(e) {
-    msgEl.textContent = 'Kòd koupon sa a pa valid.';
-  }
-};
+  };
+
 
 function getNextOrderNumber(){
-  const now = new Date();
-  const stamp = now.toISOString().replace(/[-:TZ.]/g, '').slice(0,14);
-  const random = Math.random().toString(36).slice(2,7).toUpperCase();
+
+  const now =
+    new Date();
+
+  const stamp =
+    now
+      .toISOString()
+      .replace(
+        /[-:TZ.]/g,
+        ''
+      )
+      .slice(
+        0,
+        14
+      );
+
+
+  const random =
+    Math.random()
+      .toString(36)
+      .slice(2,7)
+      .toUpperCase();
+
+
   return `KMC#${stamp}-${random}`;
+
 }
 
-window.confirmerKomand = async function(){
-  const address = document.getElementById('address').value.trim();
-  const latitude = document.getElementById('latitude').value;
-  const longitude = document.getElementById('longitude').value;
 
-  if (!address && (!latitude || !longitude)) {
-    alert("Antre yon adrès oswa itilize pozisyon ou anvan ou konfime.");
-    return;
-  }
-  if (!currentUser || !cart.length) {
-    alert("Panye a vid oswa sesyon kliyan an pa disponib.");
-    return;
-  }
+window.confirmerKomand =
+  async function(){
 
-  const button = document.querySelector('.confirm-btn');
-  if (button) { button.disabled = true; button.textContent = '⏳ Ap valide kòmand la...'; }
+    const address =
+      document.getElementById(
+        'address'
+      ).value.trim();
 
-  try {
-    // NO-BLAZE MODE: the browser writes the order directly to Firestore inside
-    // an atomic transaction. Prices/options/stock/commission are recalculated
-    // here from the authoritative product documents, not trusted from the cart,
-    // and Firestore Rules re-validate everything server-side on write.
-    const numeroKomand = getNextOrderNumber();
 
-    let commissionPourcent = 10;
+    const latitude =
+      document.getElementById(
+        'latitude'
+      ).value;
+
+
+    const longitude =
+      document.getElementById(
+        'longitude'
+      ).value;
+
+
+    if (
+      !address &&
+      (
+        !latitude ||
+        !longitude
+      )
+    ) {
+
+      alert(
+        "Antre yon adrès oswa itilize pozisyon ou anvan ou konfime."
+      );
+
+      return;
+    }
+
+
+    if (
+      !currentUser ||
+      !cart.length
+    ) {
+
+      alert(
+        "Panye a vid oswa sesyon kliyan an pa disponib."
+      );
+
+      return;
+    }
+
+
+    const button =
+      document.querySelector(
+        '.confirm-btn'
+      );
+
+
+    if (button) {
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        '⏳ Ap valide kòmand la...';
+
+    }
+
+
     try {
-      const paramSnap = await getDoc(doc(db, "parametres", "plateforme"));
-      if (paramSnap.exists() && paramSnap.data().commissionPourcent != null) {
-        commissionPourcent = Number(paramSnap.data().commissionPourcent);
+
+      // NO-BLAZE MODE:
+      // The browser writes the order directly to Firestore
+      // inside an atomic transaction.
+      //
+      // Payment remains DISABLED.
+      // No provider is called.
+      //
+      // Prices/options/stock/commission are recalculated
+      // from authoritative product documents.
+
+
+      const numeroKomand =
+        getNextOrderNumber();
+
+
+      let commissionPourcent =
+        10;
+
+
+      try {
+
+        const paramSnap =
+          await getDoc(
+            doc(
+              db,
+              "parametres",
+              "plateforme"
+            )
+          );
+
+
+        if (
+          paramSnap.exists() &&
+          paramSnap.data()
+            .commissionPourcent != null
+        ) {
+
+          commissionPourcent =
+            Number(
+              paramSnap.data()
+                .commissionPourcent
+            );
+
+        }
+
+      } catch(e) {}
+
+
+      const productRefs =
+        cart.map(
+          item =>
+            item.id
+              ? doc(
+                  db,
+                  "produits",
+                  item.id
+                )
+              : null
+        );
+
+
+      const orderRefs =
+        cart.map(
+          () =>
+            doc(
+              collection(
+                db,
+                "commandes"
+              )
+            )
+        );
+
+
+      const productQuantities =
+        new Map();
+
+
+      const firstOrderIndexByProduct =
+        new Map();
+
+
+      productRefs.forEach(
+        (ref,index)=>{
+
+          if (!ref) return;
+
+
+          const q =
+            Math.max(
+              1,
+              Number(
+                cart[index].quantite ||
+                1
+              )
+            );
+
+
+          productQuantities.set(
+            ref.id,
+            (
+              productQuantities.get(
+                ref.id
+              ) || 0
+            ) + q
+          );
+
+
+          if (
+            !firstOrderIndexByProduct
+              .has(ref.id)
+          ) {
+
+            firstOrderIndexByProduct.set(
+              ref.id,
+              index
+            );
+
+          }
+
+        }
+      );
+
+
+      const productRefById =
+        new Map();
+
+
+      productRefs.forEach(
+        ref => {
+
+          if (ref) {
+            productRefById.set(
+              ref.id,
+              ref
+            );
+          }
+
+        }
+      );
+
+
+      const couponRef =
+        appliedCoupon
+          ? doc(
+              db,
+              "coupons",
+              appliedCoupon.code
+            )
+          : null;
+
+
+      const productSnapsForNotifications =
+        new Map();
+
+
+      for (
+        const [
+          productId,
+          ref
+        ]
+        of productRefById.entries()
+      ) {
+
+        const snap =
+          await getDoc(ref);
+
+        if (
+          snap.exists()
+        ) {
+
+          productSnapsForNotifications
+            .set(
+              productId,
+              snap.data()
+            );
+
+        }
+
       }
-    } catch(e) {}
 
-    const productRefs = cart.map(item => item.id ? doc(db, "produits", item.id) : null);
-    const orderRefs = cart.map(() => doc(collection(db, "commandes")));
-    const productQuantities = new Map();
-    const firstOrderIndexByProduct = new Map();
-    productRefs.forEach((ref, index) => {
-      if (!ref) return;
-      const q = Math.max(1, Number(cart[index].quantite || 1));
-      productQuantities.set(ref.id, (productQuantities.get(ref.id) || 0) + q);
-      if (!firstOrderIndexByProduct.has(ref.id)) firstOrderIndexByProduct.set(ref.id, index);
-    });
-    const productRefById = new Map();
-    productRefs.forEach(ref => { if (ref) productRefById.set(ref.id, ref); });
-    const couponRef = appliedCoupon ? doc(db, "coupons", appliedCoupon.code) : null;
 
-    const productSnapsForNotifications = new Map();
-    for (const [productId, ref] of productRefById.entries()) {
-      const snap = await getDoc(ref);
-      if (snap.exists()) productSnapsForNotifications.set(productId, snap.data());
+      await runTransaction(
+        db,
+        async (transaction) => {
+
+          const productSnaps =
+            new Map();
+
+
+          for (
+            const [
+              productId,
+              ref
+            ]
+            of productRefById.entries()
+          ) {
+
+            productSnaps.set(
+              productId,
+              await transaction.get(ref)
+            );
+
+          }
+
+
+          let couponSnap =
+            null;
+
+
+          if (couponRef) {
+
+            couponSnap =
+              await transaction.get(
+                couponRef
+              );
+
+          }
+
+
+          for (
+            const [
+              productId,
+              quantity
+            ]
+            of productQuantities.entries()
+          ) {
+
+            const snap =
+              productSnaps.get(
+                productId
+              );
+
+
+            if (
+              !snap ||
+              !snap.exists()
+            ) {
+
+              throw new Error(
+                'PRODUCT_NOT_FOUND'
+              );
+
+            }
+
+
+            const product =
+              snap.data();
+
+
+            if (
+              product.stock != null
+            ) {
+
+              const stock =
+                Number(
+                  product.stock
+                );
+
+
+              if (
+                !Number.isFinite(
+                  stock
+                ) ||
+                stock < quantity
+              ) {
+
+                throw new Error(
+                  'INSUFFICIENT_STOCK'
+                );
+
+              }
+
+            }
+
+          }
+
+
+          if (couponSnap) {
+
+            if (
+              !couponSnap.exists() ||
+              couponSnap.data().actif !== true
+            ) {
+
+              throw new Error(
+                'INVALID_COUPON'
+              );
+
+            }
+
+
+            const c =
+              couponSnap.data();
+
+
+            if (
+              c.dateExpiration &&
+              new Date(
+                c.dateExpiration
+              ) <
+              new Date()
+            ) {
+
+              throw new Error(
+                'EXPIRED_COUPON'
+              );
+
+            }
+
+
+            const maxUse =
+              c.utilisationsMax;
+
+
+            const used =
+              Number(
+                c.utilisationsActuelles ||
+                0
+              );
+
+
+            if (
+              maxUse != null &&
+              used >= Number(maxUse)
+            ) {
+
+              throw new Error(
+                'COUPON_LIMIT'
+              );
+
+            }
+
+          }
+
+
+          cart.forEach(
+            (item,index)=>{
+
+              const quantite =
+                Math.max(
+                  1,
+                  Number(
+                    item.quantite ||
+                    1
+                  )
+                );
+
+
+              const product =
+                productSnaps
+                  .get(item.id)
+                  ?.data() ||
+                {};
+
+
+              const prixBase =
+                Number(
+                  product.prix
+                );
+
+
+              if (
+                !Number.isFinite(
+                  prixBase
+                ) ||
+                prixBase < 0
+              ) {
+
+                throw new Error(
+                  'INVALID_AMOUNT'
+                );
+
+              }
+
+
+              // Never trust option prices stored in localStorage.
+              const productOptions =
+                Array.isArray(
+                  product.opsyon
+                )
+                  ? product.opsyon
+                  : [];
+
+
+              const rawOptions =
+                Array.isArray(
+                  item.optionsSelectionnees
+                )
+                  ? item.optionsSelectionnees
+                  : [];
+
+
+              const canonicalOptions =
+                [];
+
+
+              let optionsMontant =
+                0;
+
+
+              for (
+                const selected
+                of rawOptions
+              ) {
+
+                const selectedName =
+                  String(
+                    selected?.nom ||
+                    ''
+                  ).trim();
+
+
+                const selectedPrice =
+                  Number(
+                    selected?.prix ||
+                    0
+                  );
+
+
+                const match =
+                  productOptions.find(
+                    opt =>
+                      String(
+                        opt?.nom ||
+                        ''
+                      ).trim() ===
+                      selectedName &&
+                      Number(
+                        opt?.prix ||
+                        0
+                      ) ===
+                      selectedPrice
+                  );
+
+
+                if (!match) {
+
+                  throw new Error(
+                    'INVALID_OPTION'
+                  );
+
+                }
+
+
+                canonicalOptions.push({
+                  nom:
+                    selectedName,
+
+                  prix:
+                    Number(
+                      match.prix ||
+                      0
+                    )
+                });
+
+
+                optionsMontant +=
+                  Number(
+                    match.prix ||
+                    0
+                  );
+
+              }
+
+
+              const montant =
+                prixBase +
+                optionsMontant;
+
+
+              const montantTotal =
+                Math.round(
+                  montant *
+                  quantite
+                );
+
+
+              const commissionUnitaire =
+                Math.round(
+                  montant *
+                  (
+                    commissionPourcent /
+                    100
+                  )
+                );
+
+
+              const commission =
+                commissionUnitaire *
+                quantite;
+
+
+              const isFirstItem =
+                index === 0;
+
+
+              const isFirstOrderForProduct =
+                firstOrderIndexByProduct
+                  .get(item.id) ===
+                index;
+
+
+              const stockQuantity =
+                isFirstOrderForProduct
+                  ? (
+                      productQuantities
+                        .get(item.id) ||
+                      quantite
+                    )
+                  : null;
+
+
+              const nomBase =
+                String(
+                  product.nom ||
+                  item.nomBase ||
+                  item.nom ||
+                  'Produit'
+                );
+
+
+              const produitNom =
+                canonicalOptions.length
+                  ? `${nomBase} (${canonicalOptions.map(o => o.nom).join(', ')})`
+                  : nomBase;
+
+
+              /*
+               * PAYMENT FOUNDATION
+               *
+               * The payment state comes from mc-payment-config.js.
+               * With V4.0.1 the configuration is disabled, therefore:
+               *
+               * paymentStatus = pending
+               * paymentProvider = null
+               * paymentReference = null
+               * paymentTransactionId = null
+               * paymentUpdatedAt = null
+               *
+               * No money is charged.
+               */
+
+              const orderPaymentState =
+                paymentFoundation &&
+                typeof paymentFoundation
+                  .getInitialPaymentState ===
+                  'function'
+                  ? paymentFoundation
+                      .getInitialPaymentState()
+                  : paymentInitialState;
+
+
+              transaction.set(
+                orderRefs[index],
+                {
+
+                  numeroKomand,
+
+                  clientId:
+                    currentUser.uid,
+
+                  clientNom:
+                    currentClientNom,
+
+                  produitId:
+                    item.id ||
+                    null,
+
+                  produitNom,
+
+                  nomBase,
+
+                  prixBase,
+
+                  optionsMontant,
+
+                  optionsSelectionnees:
+                    canonicalOptions,
+
+                  quantite,
+
+                  montant,
+
+                  prixUnitaire:
+                    montant,
+
+                  montantTotal,
+
+                  commissionUnitaire,
+
+                  commission,
+
+                  revenuVendeur:
+                    Math.max(
+                      0,
+                      montantTotal -
+                      commission
+                    ),
+
+                  stockQuantity,
+
+                  fraisLivrezon:
+                    isFirstItem
+                      ? (
+                          cachedDeliveryFee ||
+                          0
+                        )
+                      : 0,
+
+                  koupon:
+                    isFirstItem &&
+                    appliedCoupon
+                      ? appliedCoupon.code
+                      : null,
+
+                  koupɔnMontan:
+                    isFirstItem &&
+                    appliedCoupon
+                      ? appliedCoupon.montant
+                      : 0,
+
+                  vendeurId:
+                    (
+                      product.vendeurId ||
+                      item.vendeurId
+                    ) ||
+                    null,
+
+                  vendeurUid:
+                    (
+                      product.vendeurUid ||
+                      product.vendeurId ||
+                      item.vendeurId
+                    ) ||
+                    null,
+
+                  vendeurNom:
+                    (
+                      product.vendeurNom ||
+                      item.vendeurNom
+                    ) ||
+                    null,
+
+
+                  // PAYMENT FOUNDATION
+                  paymentStatus:
+                    orderPaymentState
+                      .paymentStatus,
+
+                  paymentProvider:
+                    orderPaymentState
+                      .paymentProvider,
+
+                  paymentReference:
+                    orderPaymentState
+                      .paymentReference,
+
+                  paymentTransactionId:
+                    orderPaymentState
+                      .paymentTransactionId,
+
+                  paymentUpdatedAt:
+                    orderPaymentState
+                      .paymentUpdatedAt,
+
+
+                  adresse:
+                    address,
+
+                  latitude:
+                    latitude ||
+                    null,
+
+                  longitude:
+                    longitude ||
+                    null,
+
+                  gpsAccuracy:
+                    Number(
+                      document.getElementById(
+                        "gpsAccuracy"
+                      ).value
+                    ) ||
+                    null,
+
+                  gpsAltitude:
+                    Number(
+                      document.getElementById(
+                        "gpsAltitude"
+                      ).value
+                    ) ||
+                    null,
+
+                  gpsHeading:
+                    Number(
+                      document.getElementById(
+                        "gpsHeading"
+                      ).value
+                    ) ||
+                    null,
+
+                  gpsSpeed:
+                    Number(
+                      document.getElementById(
+                        "gpsSpeed"
+                      ).value
+                    ) ||
+                    null,
+
+                  gpsAddress:
+                    document.getElementById(
+                      "gpsAddress"
+                    ).value ||
+                    null,
+
+                  statut:
+                    "an tann",
+
+                  statusHistory: [
+                    {
+                      status:
+                        "an tann",
+
+                      timestamp:
+                        new Date()
+                          .toISOString(),
+
+                      updatedBy:
+                        "kliyan"
+                    }
+                  ],
+
+                  dateCommande:
+                    new Date()
+                      .toISOString()
+
+                }
+
+              );
+
+            }
+          );
+
+
+          for (
+            const [
+              productId,
+              quantity
+            ]
+            of productQuantities.entries()
+          ) {
+
+            const ref =
+              productRefById.get(
+                productId
+              );
+
+
+            const product =
+              productSnaps
+                .get(productId)
+                .data();
+
+
+            if (
+              product.stock != null
+            ) {
+
+              const linkedOrderIndex =
+                firstOrderIndexByProduct
+                  .get(productId);
+
+
+              const linkedOrderRef =
+                linkedOrderIndex != null
+                  ? orderRefs[
+                      linkedOrderIndex
+                    ]
+                  : null;
+
+
+              transaction.update(
+                ref,
+                {
+
+                  stock:
+                    Number(
+                      product.stock
+                    ) -
+                    quantity,
+
+                  stockUpdateOrderId:
+                    linkedOrderRef
+                      ? linkedOrderRef.id
+                      : null,
+
+                  stockUpdateQuantity:
+                    quantity,
+
+                  stockUpdatedAt:
+                    new Date()
+                      .toISOString(),
+
+                  stockUpdatedBy:
+                    currentUser.uid
+
+                }
+              );
+
+            }
+
+          }
+
+
+          if (couponRef) {
+
+            const used =
+              Number(
+                couponSnap
+                  .data()
+                  .utilisationsActuelles ||
+                0
+              );
+
+
+            transaction.update(
+              couponRef,
+              {
+
+                utilisationsActuelles:
+                  used + 1,
+
+                derniereCommandeId:
+                  orderRefs[0].id,
+
+                derniereUtilisationPar:
+                  currentUser.uid,
+
+                derniereUtilisationAt:
+                  new Date()
+                    .toISOString()
+
+              }
+            );
+
+          }
+
+        }
+      );
+
+
+      // Persistent vendor notifications are created after the order transaction.
+
+      for (
+        let i = 0;
+        i < cart.length;
+        i++
+      ) {
+
+        const item =
+          cart[i];
+
+
+        const authoritative =
+          productSnapsForNotifications
+            .get(item.id) ||
+          {};
+
+
+        const vendorId =
+          authoritative.vendeurId ||
+          item.vendeurId;
+
+
+        const vendorName =
+          authoritative.vendeurNom ||
+          item.vendeurNom ||
+          null;
+
+
+        if (
+          !vendorId ||
+          !orderRefs[i]
+        ) {
+          continue;
+        }
+
+
+        const notificationId =
+          `${orderRefs[i].id}_${vendorId}`;
+
+
+        try {
+
+          await setDoc(
+            doc(
+              db,
+              "notifications",
+              notificationId
+            ),
+            {
+
+              type:
+                "new_order",
+
+              vendeurId:
+                vendorId,
+
+              orderId:
+                orderRefs[i].id,
+
+              numeroKomand,
+
+              clientId:
+                currentUser.uid,
+
+              clientNom:
+                currentClientNom,
+
+              produitNom:
+                item.nom,
+
+              montant:
+                Number(item.prix) *
+                Math.max(
+                  1,
+                  Number(
+                    item.quantite ||
+                    1
+                  )
+                ),
+
+              montantTotal:
+                Number(item.prix) *
+                Math.max(
+                  1,
+                  Number(
+                    item.quantite ||
+                    1
+                  )
+                ),
+
+              read:
+                false,
+
+              createdAt:
+                new Date()
+                  .toISOString()
+
+            },
+            {
+              merge:
+                false
+            }
+          );
+
+        } catch (
+          notificationError
+        ) {
+
+          console.warn(
+            'Notification vendeur non créée:',
+            notificationError
+          );
+
+        }
+
+
+        try {
+
+          const convId =
+            `${currentUser.uid}_${vendorId}`;
+
+
+          await setDoc(
+            doc(
+              db,
+              "conversations",
+              convId
+            ),
+            {
+
+              clientId:
+                currentUser.uid,
+
+              clientNom:
+                currentClientNom,
+
+              vendeurId:
+                vendorId,
+
+              vendeurNom:
+                vendorName,
+
+              produitNom:
+                item.nom,
+
+              lastMessage:
+                `🛍️ Nouvo kòmand ${numeroKomand} — ${item.nom}`,
+
+              lastMessageAt:
+                new Date()
+                  .toISOString(),
+
+              lastMessageType:
+                "order"
+
+            },
+            {
+              merge:
+                true
+            }
+          );
+
+
+          await addDoc(
+            collection(
+              db,
+              "conversations",
+              convId,
+              "messages"
+            ),
+            {
+
+              expediteurId:
+                currentUser.uid,
+
+              expediteurType:
+                "client",
+
+              type:
+                "order",
+
+              texte:
+                `🛍️ Nouvo kòmand ${numeroKomand}: ${item.nom} — ${(Number(item.prix)||0).toLocaleString('fr-FR')} G`,
+
+              date:
+                new Date()
+                  .toISOString()
+
+            }
+          );
+
+        } catch (
+          conversationError
+        ) {
+
+          console.warn(
+            'Conversation commande non créée:',
+            conversationError
+          );
+
+        }
+
+      }
+
+
+      localStorage.removeItem(
+        'mc_cart'
+      );
+
+
+      document.getElementById(
+        'checkout-content'
+      ).style.display =
+        'none';
+
+
+      document.getElementById(
+        'success-screen'
+      ).style.display =
+        'block';
+
+
+      const titleEl =
+        document.querySelector(
+          '#success-screen h2'
+        );
+
+
+      if (titleEl) {
+
+        titleEl.textContent =
+          `Kòmand ${numeroKomand} konfime!`;
+
+      }
+
+
+      envoyeEmailKonfimasyon(
+        numeroKomand,
+        address,
+        commissionPourcent
+      ).catch(
+        ()=>{}
+      );
+
+
+      const ptsEl =
+        document.getElementById(
+          'points-earned-msg'
+        );
+
+
+      if (ptsEl) {
+
+        ptsEl.textContent =
+          '⭐ Pwen M.C Rewards yo ap valide lè kòmand la rive nan estati « livre ». ';
+
+      }
+
+
+    } catch(e) {
+
+      console.error(
+        'Konfimasyon kòmand:',
+        e
+      );
+
+
+      const messages = {
+
+        PRODUCT_NOT_FOUND:
+          'Youn nan pwodwi yo pa disponib ankò. Retire li nan panye a epi eseye ankò.',
+
+        INSUFFICIENT_STOCK:
+          'Pa gen ase stock pou youn nan pwodwi yo. Retire atik la oswa chwazi yon lòt pwodwi.',
+
+        INVALID_COUPON:
+          'Koupon an pa valid ankò. Retire koupon an epi eseye ankò.',
+
+        EXPIRED_COUPON:
+          'Koupon an ekspire. Retire koupon an epi eseye ankò.',
+
+        COUPON_LIMIT:
+          'Koupon an rive nan limit itilizasyon li.',
+
+        INVALID_AMOUNT:
+          'Yon pri pwodwi a pa valid. Eseye ankò.',
+
+        INVALID_OPTION:
+          'Yon opsyon pwodwi a pa valid ankò. Retounen sou pwodwi a epi chwazi opsyon yo ankò.'
+
+      };
+
+
+      alert(
+        messages[e?.message] ||
+        'Yon erè pase pandan konfimasyon kòmand la. Eseye ankò.'
+      );
+
+
+    } finally {
+
+      if (button) {
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          'Konfime kòmand la';
+
+      }
+
     }
 
-    await runTransaction(db, async (transaction) => {
-      const productSnaps = new Map();
-      for (const [productId, ref] of productRefById.entries()) {
-        productSnaps.set(productId, await transaction.get(ref));
-      }
+  };
 
-      let couponSnap = null;
-      if (couponRef) couponSnap = await transaction.get(couponRef);
 
-      for (const [productId, quantity] of productQuantities.entries()) {
-        const snap = productSnaps.get(productId);
-        if (!snap || !snap.exists()) throw new Error('PRODUCT_NOT_FOUND');
-        const product = snap.data();
-        if (product.stock != null) {
-          const stock = Number(product.stock);
-          if (!Number.isFinite(stock) || stock < quantity) throw new Error('INSUFFICIENT_STOCK');
-        }
-      }
+async function envoyeEmailKonfimasyon(
+  numeroKomand,
+  address,
+  commissionPourcent,
+  totalOverride = null
+){
 
-      if (couponSnap) {
-        if (!couponSnap.exists() || couponSnap.data().actif !== true) throw new Error('INVALID_COUPON');
-        const c = couponSnap.data();
-        if (c.dateExpiration && new Date(c.dateExpiration) < new Date()) throw new Error('EXPIRED_COUPON');
-        const maxUse = c.utilisationsMax;
-        const used = Number(c.utilisationsActuelles || 0);
-        if (maxUse != null && used >= Number(maxUse)) throw new Error('COUPON_LIMIT');
-      }
+  const total =
+    Number.isFinite(
+      Number(totalOverride)
+    ) &&
+    Number(totalOverride) > 0
 
-      cart.forEach((item, index) => {
-        const quantite = Math.max(1, Number(item.quantite || 1));
-        const product = productSnaps.get(item.id)?.data() || {};
-        const prixBase = Number(product.prix);
-        if (!Number.isFinite(prixBase) || prixBase < 0) throw new Error('INVALID_AMOUNT');
+      ? Number(totalOverride)
 
-        // Never trust option prices stored in localStorage. Rebuild them from
-        // the authoritative Firestore product document inside the transaction.
-        const productOptions = Array.isArray(product.opsyon) ? product.opsyon : [];
-        const rawOptions = Array.isArray(item.optionsSelectionnees) ? item.optionsSelectionnees : [];
-        const canonicalOptions = [];
-        let optionsMontant = 0;
-        for (const selected of rawOptions) {
-          const selectedName = String(selected?.nom || '').trim();
-          const selectedPrice = Number(selected?.prix || 0);
-          const match = productOptions.find(opt => String(opt?.nom || '').trim() === selectedName && Number(opt?.prix || 0) === selectedPrice);
-          if (!match) throw new Error('INVALID_OPTION');
-          canonicalOptions.push({ nom: selectedName, prix: Number(match.prix || 0) });
-          optionsMontant += Number(match.prix || 0);
-        }
+      : cart.reduce(
+          (sum,item)=>
+            sum +
+            Number(item.prix) *
+            Math.max(
+              1,
+              Number(
+                item.quantite ||
+                1
+              )
+            ),
+          0
+        );
 
-        const montant = prixBase + optionsMontant;
-        const montantTotal = Math.round(montant * quantite);
-        const commissionUnitaire = Math.round(montant * (commissionPourcent / 100));
-        const commission = commissionUnitaire * quantite;
-        const isFirstItem = index === 0;
-        const isFirstOrderForProduct = firstOrderIndexByProduct.get(item.id) === index;
-        const stockQuantity = isFirstOrderForProduct ? (productQuantities.get(item.id) || quantite) : null;
-        const nomBase = String(product.nom || item.nomBase || item.nom || 'Produit');
-        const produitNom = canonicalOptions.length
-          ? `${nomBase} (${canonicalOptions.map(o => o.nom).join(', ')})`
-          : nomBase;
-        transaction.set(orderRefs[index], {
-          numeroKomand,
-          clientId: currentUser.uid,
-          clientNom: currentClientNom,
-          produitId: item.id || null,
-          produitNom,
-          nomBase,
-          prixBase,
-          optionsMontant,
-          optionsSelectionnees: canonicalOptions,
-          quantite,
-          montant,
-          prixUnitaire: montant,
-          montantTotal,
-          commissionUnitaire,
-          commission,
-          revenuVendeur: Math.max(0, montantTotal - commission),
-          stockQuantity,
-          fraisLivrezon: isFirstItem ? (cachedDeliveryFee || 0) : 0,
-          koupon: isFirstItem && appliedCoupon ? appliedCoupon.code : null,
-          koupɔnMontan: isFirstItem && appliedCoupon ? appliedCoupon.montant : 0,
-          vendeurId: (product.vendeurId || item.vendeurId) || null,
-          vendeurUid: (product.vendeurUid || product.vendeurId || item.vendeurId) || null,
-          vendeurNom: (product.vendeurNom || item.vendeurNom) || null,
-          adresse: address,
-          latitude: latitude || null,
-          longitude: longitude || null,
-          gpsAccuracy: Number(document.getElementById("gpsAccuracy").value) || null,
-          gpsAltitude: Number(document.getElementById("gpsAltitude").value) || null,
-          gpsHeading: Number(document.getElementById("gpsHeading").value) || null,
-          gpsSpeed: Number(document.getElementById("gpsSpeed").value) || null,
-          gpsAddress: document.getElementById("gpsAddress").value || null,
-          statut: "an tann",
-          statusHistory: [{ status: "an tann", timestamp: new Date().toISOString(), updatedBy: "kliyan" }],
-          dateCommande: new Date().toISOString()
-        });
-      });
 
-      for (const [productId, quantity] of productQuantities.entries()) {
-        const ref = productRefById.get(productId);
-        const product = productSnaps.get(productId).data();
-        if (product.stock != null) {
-          const linkedOrderIndex = firstOrderIndexByProduct.get(productId);
-          const linkedOrderRef = linkedOrderIndex != null ? orderRefs[linkedOrderIndex] : null;
-          transaction.update(ref, {
-            stock: Number(product.stock) - quantity,
-            stockUpdateOrderId: linkedOrderRef ? linkedOrderRef.id : null,
-            stockUpdateQuantity: quantity,
-            stockUpdatedAt: new Date().toISOString(),
-            stockUpdatedBy: currentUser.uid
-          });
-        }
-      }
+  const itemsText =
+    cart.map(
+      item =>
+        `- ${item.nom} × ${Math.max(
+          1,
+          Number(
+            item.quantite ||
+            1
+          )
+        )}: ${(Number(item.prix) *
+          Math.max(
+            1,
+            Number(
+              item.quantite ||
+              1
+            )
+          )
+        ).toLocaleString('fr-FR')} G`
+    ).join('\n');
 
-      if (couponRef) {
-        const used = Number(couponSnap.data().utilisationsActuelles || 0);
-        transaction.update(couponRef, {
-          utilisationsActuelles: used + 1,
-          derniereCommandeId: orderRefs[0].id,
-          derniereUtilisationPar: currentUser.uid,
-          derniereUtilisationAt: new Date().toISOString()
-        });
-      }
-    });
-
-    // Persistent vendor notifications are created after the order transaction.
-    for (let i = 0; i < cart.length; i++) {
-      const item = cart[i];
-      const authoritative = productSnapsForNotifications.get(item.id) || {};
-      const vendorId = authoritative.vendeurId || item.vendeurId;
-      const vendorName = authoritative.vendeurNom || item.vendeurNom || null;
-      if (!vendorId || !orderRefs[i]) continue;
-      const notificationId = `${orderRefs[i].id}_${vendorId}`;
-      try {
-        await setDoc(doc(db, "notifications", notificationId), {
-          type: "new_order",
-          vendeurId: vendorId,
-          orderId: orderRefs[i].id,
-          numeroKomand,
-          clientId: currentUser.uid,
-          clientNom: currentClientNom,
-          produitNom: item.nom,
-          montant: Number(item.prix) * Math.max(1, Number(item.quantite || 1)),
-          montantTotal: Number(item.prix) * Math.max(1, Number(item.quantite || 1)),
-          read: false,
-          createdAt: new Date().toISOString()
-        }, { merge: false });
-      } catch (notificationError) {
-        console.warn('Notification vendeur non créée:', notificationError);
-      }
-      try {
-        const convId = `${currentUser.uid}_${vendorId}`;
-        await setDoc(doc(db, "conversations", convId), {
-          clientId: currentUser.uid,
-          clientNom: currentClientNom,
-          vendeurId: vendorId,
-          vendeurNom: vendorName,
-          produitNom: item.nom,
-          lastMessage: `🛍️ Nouvo kòmand ${numeroKomand} — ${item.nom}`,
-          lastMessageAt: new Date().toISOString(),
-          lastMessageType: "order"
-        }, { merge: true });
-        await addDoc(collection(db, "conversations", convId, "messages"), {
-          expediteurId: currentUser.uid,
-          expediteurType: "client",
-          type: "order",
-          texte: `🛍️ Nouvo kòmand ${numeroKomand}: ${item.nom} — ${(Number(item.prix)||0).toLocaleString('fr-FR')} G`,
-          date: new Date().toISOString()
-        });
-      } catch (conversationError) {
-        console.warn('Conversation commande non créée:', conversationError);
-      }
-    }
-
-    localStorage.removeItem('mc_cart');
-    document.getElementById('checkout-content').style.display = 'none';
-    document.getElementById('success-screen').style.display = 'block';
-    const titleEl = document.querySelector('#success-screen h2');
-    if (titleEl) titleEl.textContent = `Kòmand ${numeroKomand} konfime!`;
-
-    envoyeEmailKonfimasyon(numeroKomand, address, commissionPourcent).catch(()=>{});
-
-    const ptsEl = document.getElementById('points-earned-msg');
-    if (ptsEl) ptsEl.textContent = '⭐ Pwen M.C Rewards yo ap valide lè kòmand la rive nan estati « livre ». ';
-  } catch(e) {
-    console.error('Konfimasyon kòmand:', e);
-    const messages = {
-      PRODUCT_NOT_FOUND: 'Youn nan pwodwi yo pa disponib ankò. Retire li nan panye a epi eseye ankò.',
-      INSUFFICIENT_STOCK: 'Pa gen ase stock pou youn nan pwodwi yo. Retire atik la oswa chwazi yon lòt pwodwi.',
-      INVALID_COUPON: 'Koupon an pa valid ankò. Retire koupon an epi eseye ankò.',
-      EXPIRED_COUPON: 'Koupon an ekspire. Retire koupon an epi eseye ankò.',
-      COUPON_LIMIT: 'Koupon an rive nan limit itilizasyon li.',
-      INVALID_AMOUNT: 'Yon pri pwodwi a pa valid. Eseye ankò.',
-      INVALID_OPTION: 'Yon opsyon pwodwi a pa valid ankò. Retounen sou pwodwi a epi chwazi opsyon yo ankò.'
-    };
-    alert(messages[e?.message] || 'Yon erè pase pandan konfimasyon kòmand la. Eseye ankò.');
-  } finally {
-    if (button) { button.disabled = false; button.textContent = 'Konfime kòmand la'; }
-  }
-};
-
-async function envoyeEmailKonfimasyon(numeroKomand, address, commissionPourcent, totalOverride = null){
-  const total = Number.isFinite(Number(totalOverride)) && Number(totalOverride) > 0
-    ? Number(totalOverride)
-    : cart.reduce((sum, item) => sum + Number(item.prix) * Math.max(1, Number(item.quantite || 1)), 0);
-  const itemsText = cart.map(item => `- ${item.nom} × ${Math.max(1, Number(item.quantite || 1))}: ${(Number(item.prix)*Math.max(1, Number(item.quantite || 1))).toLocaleString('fr-FR')} G`).join('\n');
 
   // Email konfimasyon bay kliyan an
+
   try {
-    await emailjs.send("service_7jmzzaq", "7sjufab", {
-      to_email: currentUser.email,
-      to_name: currentClientNom,
-      numero: numeroKomand,
-      items: itemsText,
-      total: total.toLocaleString('fr-FR'),
-      adresse: address || 'Pozisyon GPS'
-    });
+
+    await emailjs.send(
+      "service_7jmzzaq",
+      "7sjufab",
+      {
+
+        to_email:
+          currentUser.email,
+
+        to_name:
+          currentClientNom,
+
+        numero:
+          numeroKomand,
+
+        items:
+          itemsText,
+
+        total:
+          total.toLocaleString(
+            'fr-FR'
+          ),
+
+        adresse:
+          address ||
+          'Pozisyon GPS'
+
+      }
+    );
+
   } catch(e) {}
 
-  // Notification vendeur via Firestore; aucun profil privé/email vendeur n’est lu côté client.
+
+  // Notification vendeur via Firestore;
+  // aucun profil privé/email vendeur n’est lu côté client.
+
 }
 
-// Les boutons HTML utilisent onclick="..." alors que cette page peut être servie
-// avec un script module. On expose explicitement les handlers au scope global.
-window.rechercherAdresse = rechercherAdresse;
-window.obtenirPosition = obtenirPosition;
+
+// Les boutons HTML utilisent onclick="..."
+// alors que cette page peut être servie avec un script module.
+// On expose explicitement les handlers au scope global.
+
+window.rechercherAdresse =
+  rechercherAdresse;
+
+window.obtenirPosition =
+  obtenirPosition;
+
 </script>
-<script type="module" src="mc-analytics.js"></script>
+
+<script
+  type="module"
+  src="mc-analytics.js"
+></script>
+
 <script src="mc-seo.js"></script>
+
 </body>
-</html>
+  </html>
