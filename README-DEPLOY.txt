@@ -2,7 +2,7 @@ M.C Marketplace V4.0.1
 DEPLOYMENT NOTES
 
 Project: M.C Marketplace
-Repository: milleclatcorpgroup5-web/MC-MARKETPLACE-
+Repository: milleclatcorpgroup5-web/MC-MARKETPLACE
 Branch: main
 
 Frontend directory:
