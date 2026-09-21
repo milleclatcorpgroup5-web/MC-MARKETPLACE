@@ -1,1 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.C Marketplace — Pwodwi</title>
+<meta name="description" content="Gade detay pwodwi, pri, stock, vandè ak evalyasyon sou M.C Marketplace.">
+<style>
+  :root{
+    --nuit:#141414; --nuit-deep:#000000; --or:#E8B84B; --or-deep:#B8902E;
+    --corail:#D64545; --vert:#2E9E5B; --creme:#F7F3EC; --blanc:#FFFFFF;
+    --texte:#1A2733; --gris:#6B7785; --ligne:#E4DFD3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--creme);color:var(--texte);animation:fadeIn 0.5s ease;}
+  h1,h2{font-family:'Sora',-apple-system,sans-serif;}
+  a{color:inherit;text-decoration:none;}
 
+  header{background:var(--nuit-deep);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;}
+  header .logo{font-weight:700;font-size:18px;color:var(--blanc);}
+  header .logo span{color:var(--or);}
+  header a.back{color:#C8C8C8;font-size:13px;}
+
+  main{max-width:760px;margin:0 auto;padding:22px 20px 60px;}
+
+  .prod-hero{background:var(--blanc);border:1px solid var(--ligne);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+  .prod-img-large{width:100%;height:280px;background:#EDE6D8;display:flex;align-items:center;justify-content:center;color:var(--gris);font-size:14px;overflow:hidden;}
+  .prod-img-large img{width:100%;height:100%;object-fit:cover;}
+  .prod-info{padding:20px;}
+  .prod-info h1{font-size:21px;margin-bottom:8px;}
+  .prod-rating{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:13.5px;color:var(--gris);}
+  .stars{color:var(--or-deep);letter-spacing:1px;}
+  .prod-price{font-size:24px;font-weight:700;font-family:'Sora',sans-serif;margin-bottom:6px;}
+  .prod-vendor{font-size:13px;color:var(--gris);margin-bottom:16px;}
+  .prod-desc{font-size:14px;line-height:1.6;color:var(--texte);margin-bottom:18px;}
+  .prep-badge{display:inline-block;background:#FFF4E5;color:#B4740B;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;margin-bottom:12px;}
+  .add-cart-btn{width:100%;background:var(--nuit-deep);color:#fff;border:none;padding:14px;border-radius:9px;font-weight:700;font-size:15px;cursor:pointer;}
+
+  section.block{background:var(--blanc);border:1px solid var(--ligne);border-radius:10px;margin-bottom:18px;overflow:hidden;}
+  .block-head{padding:16px 18px;border-bottom:1px solid var(--ligne);display:flex;justify-content:space-between;align-items:center;}
+  .block-head h2{font-size:15.5px;}
+
+  .review-form{padding:18px;}
+  .star-picker{display:flex;gap:6px;margin-bottom:12px;font-size:26px;cursor:pointer;}
+  .star-picker span{color:#DDD;transition:color 0.15s;}
+  .star-picker span.selected{color:var(--or-deep);}
+  .review-form textarea{width:100%;padding:11px 13px;border:1px solid var(--ligne);border-radius:8px;font-size:14px;min-height:70px;font-family:inherit;margin-bottom:10px;}
+  .review-form button{background:var(--or);color:var(--nuit-deep);border:none;padding:10px 20px;border-radius:7px;font-weight:700;font-size:13.5px;cursor:pointer;}
+  .login-hint{padding:16px 18px;font-size:13px;color:var(--gris);}
+  .login-hint a{color:var(--corail);font-weight:600;}
+
+  .review-item{padding:14px 18px;border-top:1px solid var(--ligne);}
+  .review-item:first-child{border-top:none;}
+  .review-item .r-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .review-item strong{font-size:13.5px;}
+  .review-item p{font-size:13.5px;color:var(--texte);line-height:1.5;}
+  .empty{padding:24px 18px;text-align:center;color:var(--gris);font-size:13px;}
+
+  #toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--nuit-deep);color:#fff;padding:12px 22px;border-radius:999px;
+    font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;
+    transition:opacity 0.3s ease, transform 0.3s ease;z-index:200;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+<script src="mc-notifications-v3.3.js"></script>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">M.C <span>Marketplace</span></a>
+  <a href="index.html" class="back">← Retounen</a>
+</header>
+
+<main id="main-content">
+  <div style="text-align:center;padding:60px 0;color:var(--gris);">Chajman...</div>
+</main>
+
+<div id="toast"></div>
+
+<script type="module">
+const firebaseConfig = {
+  apiKey: "AIzaSyB_1RmQ3t-8Zzpg-mirSCv59KrioDsmjT8",
+  authDomain: "mc-marketplaceht.firebaseapp.com",
+  projectId: "mc-marketplaceht",
+  storageBucket: "mc-marketplaceht.firebasestorage.app",
+  messagingSenderId: "788708293876",
+  appId: "1:788708293876:web:09922c1e17ed6f51a2b2a1"
+};
+
+const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+const { getAuth, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+const { getFirestore, doc, getDoc, collection, addDoc, deleteDoc, getDocs, query, orderBy, where, setDoc, onSnapshot, limit } =
+  await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const params = new URLSearchParams(window.location.search);
+const productId = params.get('id');
+let currentUser = null;
+let currentClientNom = '';
+let productData = null;
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2600);
+}
+
+async function loadProduct(){
+  if (!productId) {
+    document.getElementById('main-content').innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--gris);">Pwodwi pa jwenn.</div>';
+    return;
+  }
+  try {
+    const snap = await getDoc(doc(db, "produits", productId));
+    if (!snap.exists()) {
+      document.getElementById('main-content').innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--gris);">Pwodwi sa a pa disponib ankò.</div>';
+      return;
+    }
+    productData = { id: snap.id, ...snap.data() };
+    renderProduct();
+    loadReviews();
+  } catch(e) {
+    document.getElementById('main-content').innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--gris);">Erè pandan chajman pwodwi a.</div>';
+  }
+}
+
+function renderProduct(){
+  const p = productData;
+  const desc = String(p.description || `Achte ${p.nom} sou M.C Marketplace.`).slice(0, 300);
+  let md = document.querySelector('meta[name="description"]');
+  if (!md) { md=document.createElement('meta'); md.name='description'; document.head.appendChild(md); }
+  md.content = desc;
+  let oldLd=document.getElementById('mc-product-jsonld'); if(oldLd) oldLd.remove();
+  const ld=document.createElement('script'); ld.type='application/ld+json'; ld.id='mc-product-jsonld';
+  ld.textContent=JSON.stringify({
+    '@context':'https://schema.org',
+    '@type':'Product',
+    name:p.nom, description:desc, image:p.imageUrl?[p.imageUrl]:[], sku:String(p.id),
+    offers:{'@type':'Offer', price:Number(p.prix)||0, priceCurrency:'HTG', availability:(p.stock==null||Number(p.stock)>0)?'https://schema.org/InStock':'https://schema.org/OutOfStock', url:location.href}
+  });
+  document.head.appendChild(ld);
+  const enRupture = p.stock != null && p.stock <= 0;
+  document.title = p.nom + ' — M.C Marketplace';
+  document.getElementById('main-content').innerHTML = `
+    <div class="prod-hero">
+      <div class="prod-img-large" style="position:relative;">
+        ${p.imageUrl ? `<img src="${p.imageUrl}" onerror="this.parentElement.textContent='Foto pwodwi'">` : 'Foto pwodwi'}
+        <button id="fav-btn" style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:36px;height:36px;font-size:17px;cursor:pointer;">🤍</button>
+      </div>
+      <div class="prod-info">
+        <h1>${p.nom}</h1>
+        <div class="prod-rating" id="rating-summary">Poko gen evalyasyon</div>
+        ${enRupture ? `<div class="prep-badge" style="background:#FBE7E7;color:#B4270F;">⚠️ Pa gen stock kounye a</div>` : (p.tanPreparasyon ? `<div class="prep-badge">⏱ ${p.tanPreparasyon} minit preparasyon</div>` : '')}
+        <div class="prod-price" id="prod-price-display">${Number(p.prix).toLocaleString('fr-FR')} G</div>
+        <div class="prod-vendor">Vandè: <a href="boutique.html?id=${p.vendeurId}" style="color:var(--corail);font-weight:600;">${p.vendeurNom || '—'}</a> · ${p.vendeurVille || '—'}</div>
+        <div class="prod-desc">${p.description || 'Pa gen deskripsyon pou pwodwi sa a.'}</div>
+        ${(p.opsyon && p.opsyon.length > 0) ? `
+          <div style="margin-bottom:16px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Opsyon disponib:</div>
+            ${p.opsyon.map((o,i) => `
+              <label style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--ligne);font-size:13.5px;">
+                <span><input type="checkbox" class="opt-checkbox" data-price="${o.prix}" style="margin-right:8px;">${o.nom}</span>
+                <span style="color:var(--gris);">${o.prix > 0 ? '+' + o.prix.toLocaleString('fr-FR') + ' G' : 'Gratis'}</span>
+              </label>
+            `).join('')}
+          </div>
+        ` : ''}
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="add-cart-btn" id="add-cart-btn" ${enRupture ? 'disabled style="background:#DDD;color:#888;cursor:not-allowed;"' : ''}>${enRupture ? 'Pa gen stock' : 'Ajoute nan panye'}</button>
+          <button type="button" id="share-product-btn" style="border:1px solid var(--ligne);background:#fff;color:var(--nuit-deep);padding:11px 14px;border-radius:8px;font-weight:700;cursor:pointer;">📤 Pataje</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="block">
+      <div class="block-head"><h2>Poze yon kesyon bay vandè a</h2></div>
+      <div id="chat-area"></div>
+    </section>
+
+    <section class="block">
+      <div class="block-head"><h2>Kite yon evalyasyon</h2></div>
+      <div id="review-form-area"></div>
+    </section>
+
+    <section class="block">
+      <div class="block-head"><h2>Evalyasyon kliyan yo</h2></div>
+      <div id="reviews-list"></div>
+      <div id="reviews-empty" class="empty">Poko gen evalyasyon pou pwodwi sa a.</div>
+    </section>
+
+    <section class="block">
+      <div class="block-head"><h2>Pwodwi sanble</h2></div>
+      <div id="similar-products" style="padding:16px 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;"></div>
+      <div id="similar-empty" class="empty" style="display:none;">Pa gen lòt pwodwi nan menm kategori a.</div>
+    </section>
+  `;
+
+  function calculateOptionsTotal(){
+    let extra = 0;
+    const selectedNames = [];
+    document.querySelectorAll('.opt-checkbox:checked').forEach(cb => {
+      extra += Number(cb.dataset.price);
+      selectedNames.push(cb.closest('label').textContent.trim().split('+')[0].trim());
+    });
+    return { extra, selectedNames };
+  }
+
+  document.querySelectorAll('.opt-checkbox').forEach(cb => {
+    cb.addEventListener('change', ()=>{
+      const { extra } = calculateOptionsTotal();
+      document.getElementById('prod-price-display').textContent = (Number(p.prix) + extra).toLocaleString('fr-FR') + ' G';
+    });
+  });
+
+  if (!enRupture) {
+    document.getElementById('add-cart-btn').addEventListener('click', ()=>{
+      const { extra, selectedNames } = calculateOptionsTotal();
+      const finalPrix = Number(p.prix) + extra;
+      const nomFinal = selectedNames.length > 0 ? `${p.nom} (${selectedNames.join(', ')})` : p.nom;
+      let cart = JSON.parse(localStorage.getItem('mc_cart') || '[]');
+      const optionsSelectionnees = selectedNames.map((nom, index) => {
+        const checked = [...document.querySelectorAll('.opt-checkbox:checked')][index];
+        return { nom, prix: Number(checked.dataset.price || 0) };
+      });
+      const newItem = {
+        id: p.id,
+        nom: nomFinal,
+        prix: finalPrix,
+        prixBase: Number(p.prix),
+        optionsMontant: extra,
+        optionsSelectionnees,
+        nomBase: p.nom,
+        vendeurId: p.vendeurId,
+        vendeurNom: p.vendeurNom,
+        quantite: 1
+      };
+      const cartKey = JSON.stringify([newItem.id || null, newItem.optionsSelectionnees || []]);
+      const existing = cart.find(item => JSON.stringify([item.id || null, item.optionsSelectionnees || []]) === cartKey);
+      if (existing) existing.quantite = Math.max(1, Number(existing.quantite || 1) + 1);
+      else cart.push(newItem);
+      localStorage.setItem('mc_cart', JSON.stringify(cart));
+      showToast('Ajoute nan panye a!');
+    });
+  }
+
+  recordRecentlyViewed(p);
+  setupShareButton();
+  renderReviewForm();
+  setupFavoriButton();
+  setupChat();
+  loadSimilarProducts();
+}
+
+function recordRecentlyViewed(p){
+  try {
+    const key = String(p.id);
+    let items = JSON.parse(localStorage.getItem('mc_recent_products') || '[]');
+    if (!Array.isArray(items)) items = [];
+    items = items.filter(x => String(x.id) !== key);
+    items.unshift({
+      id: p.id,
+      nom: p.nom || 'Pwodwi',
+      prix: Number(p.prix) || 0,
+      imageUrl: p.imageUrl || '',
+      vendeurNom: p.vendeurNom || '',
+      vendeurVille: p.vendeurVille || ''
+    });
+    localStorage.setItem('mc_recent_products', JSON.stringify(items.slice(0,6)));
+  } catch (_) {}
+}
+
+function setupShareButton(){
+  const btn = document.getElementById('share-product-btn');
+  if (!btn || btn.dataset.bound === '1') return;
+  btn.dataset.bound = '1';
+  btn.addEventListener('click', async ()=>{
+    const shareData = {
+      title: productData?.nom ? `${productData.nom} — M.C Marketplace` : 'M.C Marketplace',
+      text: productData?.nom ? `Gade pwodwi sa a sou M.C Marketplace: ${productData.nom}` : 'Gade sa sou M.C Marketplace',
+      url: window.location.href
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+    } catch (e) {
+      if (e?.name === 'AbortError') return;
+    }
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast('Lyen pwodwi a kopye.');
+    } catch (_) {
+      window.prompt('Kopye lyen pwodwi a:', window.location.href);
+    }
+  });
+}
+
+let currentFavoriId = null;
+let favBtnBound = false;
+
+async function setupFavoriButton(){
+  const btn = document.getElementById('fav-btn');
+  currentFavoriId = null;
+  btn.textContent = '🤍';
+  if (currentUser) {
+    const q = query(collection(db, "favoris"), where("clientId","==",currentUser.uid), where("produitId","==",productId));
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      currentFavoriId = snap.docs[0].id;
+      btn.textContent = '❤️';
+    }
+  }
+  if (favBtnBound) return;
+  favBtnBound = true;
+  btn.addEventListener('click', async ()=>{
+    if (!currentUser) {
+      window.location.href = 'compte.html';
+      return;
+    }
+    try {
+      if (currentFavoriId) {
+        await deleteDoc(doc(db, "favoris", currentFavoriId));
+        currentFavoriId = null;
+        btn.textContent = '🤍';
+      } else {
+        const ref = await addDoc(collection(db, "favoris"), {
+          clientId: currentUser.uid,
+          produitId: productId,
+          produitNom: productData.nom,
+          prix: productData.prix,
+          imageUrl: productData.imageUrl || '',
+          dateAjout: new Date().toISOString()
+        });
+        currentFavoriId = ref.id;
+        btn.textContent = '❤️';
+      }
+    } catch(e) {
+      alert('Erè, eseye ankò.');
+    }
+  });
+}
+
+async function renderReviewForm(){
+  const area = document.getElementById('review-form-area');
+  if (!currentUser) {
+    area.innerHTML = `<div class="login-hint">Ou dwe <a href="compte.html">konekte</a> pou kite yon evalyasyon.</div>`;
+    return;
+  }
+
+  area.innerHTML = `<div class="login-hint">Verifikasyon achte...</div>`;
+  let dejaAchte = false;
+  try {
+    const q = query(collection(db, "commandes"), where("clientId","==",currentUser.uid), where("produitId","==",productId));
+    const snap = await getDocs(q);
+    dejaAchte = !snap.empty;
+  } catch(e) { dejaAchte = false; }
+
+  if (!dejaAchte) {
+    area.innerHTML = `<div class="login-hint">Ou dwe achte pwodwi sa a anvan ou ka kite yon evalyasyon — sa ede kenbe evalyasyon yo serye.</div>`;
+    return;
+  }
+
+  area.innerHTML = `
+    <div class="review-form">
+      <div style="font-size:12px;color:var(--vert);font-weight:600;margin-bottom:10px;">✓ Achte verifye</div>
+      <div class="star-picker" id="star-picker">
+        <span data-val="1">★</span><span data-val="2">★</span><span data-val="3">★</span><span data-val="4">★</span><span data-val="5">★</span>
+      </div>
+      <textarea id="review-text" placeholder="Sa ou panse sou pwodwi a..."></textarea>
+      <button id="submit-review-btn">Voye evalyasyon</button>
+    </div>
+  `;
+  let selectedStars = 0;
+  document.querySelectorAll('#star-picker span').forEach(star=>{
+    star.addEventListener('click', ()=>{
+      selectedStars = Number(star.dataset.val);
+      document.querySelectorAll('#star-picker span').forEach(s=>{
+        s.classList.toggle('selected', Number(s.dataset.val) <= selectedStars);
+      });
+    });
+  });
+  document.getElementById('submit-review-btn').addEventListener('click', async ()=>{
+    const commentaire = document.getElementById('review-text').value.trim();
+    if (selectedStars === 0) { alert('Chwazi yon kantite zetwal.'); return; }
+    try {
+      if (commentaire.length > 1000) { alert('Avis la twò long (maksimòm 1000 karaktè).'); return; }
+      // Only a delivered order can create a verified review.
+      const deliveredQ = query(
+        collection(db, "commandes"),
+        where("clientId", "==", currentUser.uid),
+        where("produitId", "==", productId)
+      );
+      const deliveredSnap = await getDocs(deliveredQ);
+      let deliveredOrder = null;
+      deliveredSnap.forEach(d => {
+        const o = d.data();
+        if (!deliveredOrder && o.statut === "livre") deliveredOrder = {id:d.id, ...o};
+      });
+      if (!deliveredOrder) {
+        alert('Ou ka evalye pwodwi sa a sèlman apre ou fin resevwa li.');
+        return;
+      }
+      const reviewId = `${deliveredOrder.id}_${currentUser.uid}`;
+      await setDoc(doc(db, "produits", productId, "avis", reviewId), {
+        clientId: currentUser.uid,
+        clientNom: currentClientNom,
+        commandeId: deliveredOrder.id,
+        produitId: productId,
+        note: selectedStars,
+        commentaire,
+        verifye: true,
+        date: new Date().toISOString()
+      });
+      showToast('Mèsi pou evalyasyon ou!');
+      loadReviews();
+      renderReviewForm();
+    } catch(e) {
+      alert('Erè pandan voye evalyasyon an.');
+    }
+  });
+}
+
+async function loadReviews(){
+  const list = document.getElementById('reviews-list');
+  const empty = document.getElementById('reviews-empty');
+  const summary = document.getElementById('rating-summary');
+  try {
+    const q = query(collection(db, "produits", productId, "avis"), orderBy("date", "desc"));
+    const snap = await getDocs(q);
+    const reviews = [];
+    snap.forEach(d => reviews.push({ id: d.id, ...d.data() }));
+
+    if (reviews.length === 0) {
+      empty.style.display = 'block';
+      list.innerHTML = '';
+      summary.textContent = 'Poko gen evalyasyon';
+      return;
+    }
+    empty.style.display = 'none';
+    const avg = reviews.reduce((sum,r)=> sum + r.note, 0) / reviews.length;
+    summary.innerHTML = `<span class="stars">${'★'.repeat(Math.round(avg))}${'☆'.repeat(5-Math.round(avg))}</span> ${avg.toFixed(1)} (${reviews.length} evalyasyon)`;
+
+    list.innerHTML = reviews.map(r => `
+      <div class="review-item">
+        <div class="r-head">
+          <strong>${r.clientNom} ${r.verifye ? '<span style="color:var(--vert);font-size:11px;">✓ Achte verifye</span>' : ''}</strong>
+          <span class="stars">${'★'.repeat(r.note)}${'☆'.repeat(5-r.note)}</span>
+        </div>
+        ${r.commentaire ? `<p>${r.commentaire}</p>` : ''}
+      </div>
+    `).join('');
+  } catch(e) {
+    empty.style.display = 'block';
+  }
+}
+
+onAuthStateChanged(auth, async (user)=>{
+  currentUser = user;
+  if (user) {
+    const clientDoc = await getDoc(doc(db, "clients", user.uid));
+    currentClientNom = clientDoc.exists() ? clientDoc.data().nom : user.email;
+  }
+  if (productData) {
+    renderReviewForm();
+    setupFavoriButton();
+    setupChat();
+  }
+});
+
+let chatUnsubscribe = null;
+
+function setupChat(){
+  const area = document.getElementById('chat-area');
+  if (!currentUser) {
+    area.innerHTML = `<div class="login-hint">Ou dwe <a href="compte.html">konekte</a> pou poze vandè a yon kesyon.</div>`;
+    return;
+  }
+  if (!productData.vendeurId) {
+    area.innerHTML = `<div class="login-hint">Pa gen enfòmasyon vandè disponib pou chat la.</div>`;
+    return;
+  }
+
+  const convId = currentUser.uid + '_' + productData.vendeurId;
+  area.innerHTML = `
+    <div id="chat-messages" style="padding:16px 18px;max-height:260px;overflow-y:auto;"></div>
+    <div style="display:flex;gap:8px;padding:0 18px 18px;">
+      <input type="text" id="chat-input" placeholder="Ekri mesaj ou..." style="flex:1;padding:10px 12px;border:1px solid var(--ligne);border-radius:8px;font-size:14px;">
+      <button id="chat-send-btn" style="background:var(--nuit-deep);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:600;font-size:13.5px;cursor:pointer;">Voye</button>
+    </div>
+  `;
+
+  if (chatUnsubscribe) chatUnsubscribe();
+  const messagesRef = collection(db, "conversations", convId, "messages");
+  const q = query(messagesRef, orderBy("date", "asc"));
+  chatUnsubscribe = onSnapshot(q, (snap)=>{
+    const msgs = [];
+    snap.forEach(d => msgs.push(d.data()));
+    const box = document.getElementById('chat-messages');
+    if (!box) return;
+    if (msgs.length === 0) {
+      box.innerHTML = '<div style="color:var(--gris);font-size:13px;text-align:center;padding:10px 0;">Poze premye kesyon w la.</div>';
+    } else {
+      box.innerHTML = msgs.map(m => `
+        <div style="margin-bottom:10px;display:flex;${m.expediteurType==='client' ? 'justify-content:flex-end;' : ''}">
+          <div style="max-width:75%;background:${m.expediteurType==='client' ? 'var(--nuit-deep)' : '#F0ECE3'};color:${m.expediteurType==='client' ? '#fff' : 'var(--texte)'};padding:8px 12px;border-radius:10px;font-size:13.5px;">
+            ${m.texte}
+          </div>
+        </div>
+      `).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+  });
+
+  document.getElementById('chat-send-btn').addEventListener('click', ()=> sendChatMessage(convId));
+  document.getElementById('chat-input').addEventListener('keypress', (e)=>{
+    if (e.key === 'Enter') sendChatMessage(convId);
+  });
+}
+
+async function sendChatMessage(convId){
+  const input = document.getElementById('chat-input');
+  const texte = input.value.trim();
+  if (!texte) return;
+  input.value = '';
+  try {
+    await setDoc(doc(db, "conversations", convId), {
+      clientId: currentUser.uid,
+      clientNom: currentClientNom,
+      vendeurId: productData.vendeurId,
+      vendeurNom: productData.vendeurNom,
+      produitNom: productData.nom,
+      lastMessage: texte,
+      lastMessageAt: new Date().toISOString()
+    }, { merge: true });
+    await addDoc(collection(db, "conversations", convId, "messages"), {
+      expediteurId: currentUser.uid,
+      expediteurType: 'client',
+      texte,
+      date: new Date().toISOString()
+    });
+    // Notify the vendor without making notification failure block the message.
+    try {
+      await setDoc(doc(db, "notifications", `${convId}_clientmsg_${Date.now()}`), {
+        type: 'new_message',
+        clientId: currentUser.uid,
+        vendeurId: productData.vendeurId,
+        conversationId: convId,
+        read: false,
+        createdAt: new Date().toISOString(),
+        messagePreview: texte.slice(0,120)
+      });
+    } catch(notificationError) {
+      console.warn('Notification vendeur pa kreye:', notificationError);
+    }
+  } catch(e) {
+    console.error('Erreur chat client → vendeur:', e?.code, e?.message, e);
+    alert('Erè pandan voye mesaj la.\n\n' + (e?.code || 'unknown') + '\n' + (e?.message || 'Erè Firestore.'));
+  }
+}
+
+async function loadSimilarProducts(){
+  const box = document.getElementById('similar-products');
+  const empty = document.getElementById('similar-empty');
+  try {
+    const q = query(collection(db, "produits"), where("categorie", "==", productData.categorie), limit(12));
+    const snap = await getDocs(q);
+    const similar = [];
+    snap.forEach(d => { if (d.id !== productId) similar.push({ id: d.id, ...d.data() }); });
+    if (similar.length === 0) { empty.style.display = 'block'; box.innerHTML = ''; return; }
+    empty.style.display = 'none';
+    box.innerHTML = similar.slice(0, 6).map(p => `
+      <a href="produit.html?id=${p.id}" style="text-decoration:none;color:inherit;border:1px solid var(--ligne);border-radius:8px;overflow:hidden;display:block;">
+        <div style="height:90px;background:#EDE6D8;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--gris);overflow:hidden;">
+          ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.textContent='Foto'">` : 'Foto'}
+        </div>
+        <div style="padding:8px;">
+          <div style="font-size:12px;font-weight:600;margin-bottom:3px;">${p.nom}</div>
+          <div style="font-size:12px;color:var(--or-deep);font-weight:700;">${Number(p.prix).toLocaleString('fr-FR')} G</div>
+        </div>
+      </a>
+    `).join('');
+  } catch(e) {
+    empty.style.display = 'block';
+  }
+}
+
+loadProduct();
+</script>
+<script type="module" src="mc-analytics.js"></script>
+<script src="mc-seo.js"></script>
+</body>
+</html>
