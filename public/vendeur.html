@@ -1,1 +1,1578 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.C Marketplace — Espace Vendeur</title>
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Espace vandè M.C Marketplace pou pwodwi, stock, kòmand ak livrezon.">
+<style>
+  :root{
+    --nuit:#141414;
+    --nuit-deep:#000000;
+    --or:#E8B84B;
+    --or-deep:#B8902E;
+    --corail:#D64545;
+    --vert:#2E9E5B;
+    --creme:#F7F3EC;
+    --blanc:#FFFFFF;
+    --texte:#1A2733;
+    --gris:#6B7785;
+    --ligne:#E4DFD3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--creme);color:var(--texte);}
+  h1,h2,h3{font-family:'Sora',-apple-system,sans-serif;}
 
+  /* ---- AUTH SCREEN ---- */
+  #auth-screen{
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--nuit) 0%,var(--nuit-deep) 100%);
+    padding:20px;
+  }
+  .auth-box{
+    background:var(--blanc);
+    border-radius:12px;
+    padding:32px 28px;
+    width:100%;
+    max-width:380px;
+  }
+  .auth-box .logo{font-weight:700;font-size:19px;color:var(--nuit);margin-bottom:2px;}
+  .auth-box .logo span{color:var(--or-deep);}
+  .auth-box .subtitle{font-size:13px;color:var(--gris);margin-bottom:20px;}
+  .auth-tabs{display:flex;background:#F0ECE3;border-radius:8px;padding:3px;margin-bottom:20px;}
+  .auth-tab{flex:1;text-align:center;padding:9px;border:none;background:none;border-radius:6px;font-size:13.5px;font-weight:600;color:var(--gris);cursor:pointer;}
+  .auth-tab.active{background:var(--nuit);color:var(--blanc);}
+  .auth-form{display:none;}
+  .auth-form.active{display:block;}
+  .auth-form input{
+    width:100%;padding:11px 13px;border:1px solid var(--ligne);border-radius:8px;
+    font-size:14px;margin-bottom:10px;outline:none;
+  }
+  .auth-form input:focus{border-color:var(--or-deep);}
+  .auth-form button.submit{
+    width:100%;padding:12px;background:var(--nuit);color:var(--blanc);
+    border:none;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;margin-top:4px;
+  }
+  #auth-error{color:var(--corail);font-size:12.5px;margin-top:10px;display:none;}
+  #auth-info{color:var(--vert);font-size:12.5px;margin-top:10px;display:none;}
+
+  /* ---- PENDING / SUSPENDED SCREEN ---- */
+  #status-screen{
+    display:none;
+    min-height:100vh;
+    align-items:center;justify-content:center;
+    background:var(--creme);
+    padding:20px;
+    text-align:center;
+  }
+  .status-box{max-width:380px;}
+  .status-box .icon{font-size:44px;margin-bottom:16px;}
+  .status-box h2{font-size:19px;margin-bottom:10px;}
+  .status-box p{font-size:14px;color:var(--gris);line-height:1.6;margin-bottom:20px;}
+  .status-box button{
+    background:var(--nuit-deep);color:var(--blanc);border:none;
+    padding:10px 20px;border-radius:8px;font-weight:600;font-size:13.5px;cursor:pointer;
+  }
+
+  /* ---- APP SHELL ---- */
+  #app{display:none;min-height:100vh;}
+  .topbar{
+    background:var(--nuit);color:var(--blanc);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 22px;
+  }
+  .topbar .brand{font-weight:700;font-size:17px;}
+  .topbar .brand span{color:var(--or);}
+  .topbar button{
+    background:transparent;border:1px solid #3A3A3A;color:#C8C8C8;
+    padding:7px 14px;border-radius:6px;font-size:12.5px;cursor:pointer;
+  }
+  .tabs{display:flex;gap:4px;background:var(--nuit-deep);padding:0 22px;overflow-x:auto;}
+  .tab{
+    color:#9F9F9F;background:none;border:none;padding:12px 16px;font-size:13.5px;
+    font-weight:600;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;
+  }
+  .tab.active{color:var(--or);border-bottom-color:var(--or);}
+
+  main{max-width:900px;margin:0 auto;padding:26px 20px 60px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:26px;}
+  .kpi-card{background:var(--blanc);border:1px solid var(--ligne);border-radius:10px;padding:16px 18px;}
+  .kpi-card .label{font-size:12px;color:var(--gris);margin-bottom:6px;}
+  .kpi-card .value{font-size:21px;font-weight:700;font-family:'Sora',sans-serif;color:var(--or-deep);}
+
+  section.block{background:var(--blanc);border:1px solid var(--ligne);border-radius:10px;margin-bottom:22px;overflow:hidden;}
+  .block-head{padding:16px 20px;border-bottom:1px solid var(--ligne);display:flex;justify-content:space-between;align-items:center;}
+  .block-head h2{font-size:15.5px;}
+
+  /* Product form */
+  .prod-form{padding:20px;display:grid;gap:12px;}
+  .prod-form .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .prod-form label{font-size:12.5px;font-weight:600;display:block;margin-bottom:5px;color:var(--gris);}
+  .prod-form input,.prod-form select,.prod-form textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--ligne);border-radius:7px;font-size:14px;
+    font-family:inherit;
+  }
+  .prod-form textarea{resize:vertical;min-height:70px;}
+  .prod-form .add-btn{
+    background:var(--or);color:var(--nuit-deep);border:none;padding:11px 20px;
+    border-radius:7px;font-weight:700;font-size:13.5px;cursor:pointer;width:fit-content;
+  }
+
+  /* Product list */
+  .prod-list{padding:16px 20px;display:grid;gap:12px;}
+  .prod-item{
+    display:flex;justify-content:space-between;align-items:center;
+    border:1px solid var(--ligne);border-radius:8px;padding:12px 14px;
+  }
+  .prod-item .info strong{display:block;font-size:14px;margin-bottom:3px;}
+  .prod-item .info span{font-size:12.5px;color:var(--gris);}
+  .prod-item .price{font-weight:700;color:var(--nuit);font-size:14px;margin-right:12px;}
+  .prod-item .del-btn{background:none;border:none;color:var(--corail);font-size:12.5px;font-weight:600;cursor:pointer;}
+  .empty{padding:30px 20px;text-align:center;color:var(--gris);font-size:13px;}
+  .conv-item{padding:10px 12px;border-bottom:1px solid var(--ligne);cursor:pointer;font-size:12.5px;}
+  .conv-item.active{background:#F0ECE3;}
+  .conv-item strong{display:block;font-size:12.5px;margin-bottom:2px;}
+  .conv-item span{color:var(--gris);font-size:11px;}
+
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);}}
+  .fade-in{animation:fadeIn 0.4s ease;}
+
+  /* ---- NOTIFICATIONS ---- */
+  .notif-wrap{position:relative;}
+  .notif-btn{background:transparent;border:1px solid #3A3A3A;color:#fff;padding:7px 11px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;position:relative;}
+  .notif-badge{position:absolute;top:-7px;right:-7px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--corail);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;border:2px solid var(--nuit);}
+  #notification-panel{display:none;position:fixed;top:62px;right:18px;width:min(390px,calc(100vw - 28px));max-height:72vh;background:#fff;border:1px solid var(--ligne);border-radius:12px;box-shadow:0 12px 35px rgba(0,0,0,.18);z-index:250;overflow:hidden;}
+  .notif-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--ligne);font-weight:700;}
+  .notif-head button{border:none;background:#F0ECE3;padding:6px 9px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;}
+  #notification-list{max-height:58vh;overflow:auto;}
+  .notif-item{padding:13px 15px;border-bottom:1px solid var(--ligne);cursor:pointer;background:#fff;}
+  .notif-item.unread{background:#FFF9EA;}
+  .notif-item strong{display:block;font-size:13px;margin-bottom:3px;}
+  .notif-item span{display:block;font-size:11.5px;color:var(--gris);line-height:1.45;}
+  .notif-empty{padding:28px 16px;text-align:center;color:var(--gris);font-size:13px;}
+
+  #toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--nuit-deep);color:#fff;padding:12px 22px;border-radius:999px;
+    font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;
+    transition:opacity 0.3s ease, transform 0.3s ease;z-index:200;
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;padding:10px 20px;background:#FAF8F3;color:var(--gris);font-weight:600;font-size:11.5px;text-transform:uppercase;}
+  td{padding:12px 20px;border-top:1px solid var(--ligne);}
+
+  /* Subscription */
+  .sub-box{padding:22px 20px;}
+  .sub-status{
+    display:inline-block;padding:5px 14px;border-radius:999px;font-size:12.5px;font-weight:700;margin-bottom:14px;
+  }
+  .sub-status.active{background:#E4F5EA;color:var(--vert);}
+  .sub-status.inactive{background:#FBE7E7;color:var(--corail);}
+  .sub-box p{font-size:14px;color:var(--gris);margin-bottom:16px;line-height:1.6;}
+  .sub-box .price-tag{font-size:26px;font-weight:700;font-family:'Sora',sans-serif;margin-bottom:16px;}
+  .sub-box .price-tag small{font-size:13px;font-weight:400;color:var(--gris);}
+  .sub-box button{
+    background:var(--nuit-deep);color:var(--blanc);border:none;padding:11px 22px;
+    border-radius:8px;font-weight:700;font-size:13.5px;cursor:pointer;
+  }
+</style>
+<script src="mc-notifications-v3.3.js"></script>
+</head>
+<body>
+
+<!-- ===================== AUTH ===================== -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div class="logo">M.C Marketplace <span>Haiti</span></div>
+    <div class="subtitle">Espace vendeur</div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Connexion</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">Enskri</button>
+    </div>
+
+    <div class="auth-form active" id="form-login">
+      <input type="email" id="login-email" placeholder="Email">
+      <input type="password" id="login-pass" placeholder="Mot de passe">
+      <button class="submit" onclick="handleVendorLogin()">Se connecter</button>
+      <div style="text-align:center;margin-top:10px;">
+        <a href="#" onclick="event.preventDefault(); resetVendorPassword();" style="font-size:12.5px;color:var(--gris);">Mo depas bliye?</a>
+      </div>
+    </div>
+
+    <div class="auth-form" id="form-signup">
+      <div style="background:#FFF8E7;border:1px solid #E8B84B;border-radius:8px;padding:10px 12px;font-size:12px;color:#6b5520;margin-bottom:12px;line-height:1.5;">Si ou deja gen yon kont kliyan, konekte ak menm email/mo depas la. Ou pap bezwen kreye yon lòt kont.</div>
+      <input type="text" id="signup-nom-responsab" placeholder="Non konplè responsab la">
+      <input type="text" id="signup-nom" placeholder="Non biznis / non boutik">
+      <select id="signup-type" style="width:100%;padding:11px 13px;border:1px solid var(--ligne);border-radius:8px;font-size:14px;margin-bottom:10px;font-family:inherit;">
+        <option value="boutik">Boutik / Vann pwodwi</option>
+        <option value="restoran">Restoran / Vann manje</option>
+      </select>
+      <input type="text" id="signup-ville" placeholder="Vil (ex: Pòtoprens, Okap...)">
+      <input type="tel" id="signup-telephone" placeholder="Nimewo telefòn (eg. +509 37xx-xxxx)" autocomplete="tel">
+      <input type="email" id="signup-email" placeholder="Email">
+      <input type="password" id="signup-pass" placeholder="Mo depas (6 karaktè minimòm)">
+      <button class="submit" onclick="handleVendorSignup()">Kreye kont vandè</button>
+    </div>
+
+    <div id="auth-error"></div>
+    <div id="auth-info"></div>
+  </div>
+</div>
+
+<!-- ===================== EXISTING CLIENT -> VENDOR APPLICATION ===================== -->
+<div id="vendor-apply-screen" style="display:none;min-height:100vh;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--nuit),var(--nuit-deep));padding:20px;">
+  <div class="auth-box" style="max-width:420px;">
+    <div class="logo">M.C Marketplace <span>Haiti</span></div>
+    <div class="subtitle">🏪 Vin vandè ak menm kont kliyan ou a</div>
+    <div style="background:#F7F3EC;border-radius:8px;padding:10px 12px;font-size:12px;color:var(--gris);margin-bottom:14px;line-height:1.5;">Ou deja konekte. Nou pral itilize menm UID Firebase la pou kliyan + vandè.</div>
+    <input type="text" id="apply-nom-responsab" placeholder="Non konplè responsab la">
+    <input type="text" id="apply-nom-boutik" placeholder="Non biznis / non boutik">
+    <select id="apply-type" style="width:100%;padding:11px 13px;border:1px solid var(--ligne);border-radius:8px;font-size:14px;margin-bottom:10px;font-family:inherit;">
+      <option value="boutik">Boutik / Vann pwodwi</option>
+      <option value="restoran">Restoran / Vann manje</option>
+    </select>
+    <input type="text" id="apply-ville" placeholder="Vil">
+    <input type="tel" id="apply-telephone" placeholder="Nimewo telefòn" autocomplete="tel">
+    <button class="submit" type="button" onclick="submitVendorApplication()">Soumèt demann vandè</button>
+    <button type="button" onclick="handleLogout()" style="width:100%;margin-top:8px;padding:10px;border:1px solid var(--ligne);border-radius:8px;background:#fff;font-weight:700;cursor:pointer;">Dekonekte</button>
+    <div id="apply-error" style="display:none;color:var(--corail);font-size:12.5px;margin-top:10px;"></div>
+    <div id="apply-info" style="display:none;color:var(--vert);font-size:12.5px;margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- ===================== PROFILE MIGRATION ===================== -->
+<div id="vendor-profile-reset-screen" style="display:none;min-height:100vh;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--nuit),var(--nuit-deep));padding:20px;">
+  <div class="auth-box" style="max-width:460px;width:100%;">
+    <div class="logo">M.C Marketplace <span>Haiti</span></div>
+    <h2 style="margin:12px 0 6px;">🔄 Mete pwofil vandè a ajou</h2>
+    <p style="font-size:13px;color:var(--gris);line-height:1.5;margin:0 0 16px;">Nou mete sistèm enskripsyon an ajou. Nou pap efase kont ou, pwodwi ou, kòmand ou oswa done biznis ou. Verifye enfòmasyon sa yo pou revalide pwofil vandè a.</p>
+    <input type="text" id="vendor-reset-nom-responsab" placeholder="Non konplè responsab la">
+    <input type="text" id="vendor-reset-nom-boutik" placeholder="Non biznis / non boutik">
+    <select id="vendor-reset-type" style="width:100%;padding:11px 13px;border:1px solid var(--ligne);border-radius:8px;font-size:14px;margin-bottom:10px;font-family:inherit;">
+      <option value="boutik">Boutik / Vann pwodwi</option>
+      <option value="restoran">Restoran / Vann manje</option>
+    </select>
+    <input type="text" id="vendor-reset-ville" placeholder="Vil">
+    <input type="tel" id="vendor-reset-telephone" placeholder="Nimewo telefòn" autocomplete="tel">
+    <div id="vendor-reset-error" style="display:none;color:var(--corail);font-size:12.5px;margin:8px 0;"></div>
+    <button class="submit" type="button" onclick="completeVendorProfileMigration()">Sove epi kontinye</button>
+    <button type="button" onclick="handleLogout()" style="width:100%;margin-top:8px;padding:10px;border:1px solid var(--ligne);border-radius:8px;background:#fff;font-weight:700;cursor:pointer;">Dekonekte</button>
+  </div>
+</div>
+
+<!-- ===================== PENDING / SUSPENDED ===================== -->
+<div id="status-screen">
+  <div class="status-box">
+    <div class="icon" id="status-icon">⏳</div>
+    <h2 id="status-title">Kont ou an ap tann apwobasyon</h2>
+    <p id="status-text">Yon administratè ap verifye enfòmasyon w yo. Ou pral ka ajoute pwodwi yon fwa yo apwouve kont ou.</p>
+    <button onclick="handleLogout()">Dekonekte</button>
+  </div>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div id="app">
+  <div class="topbar">
+    <div class="brand">M.C Marketplace <span>Haiti</span> — Vandè</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <a href="index.html" style="color:#fff;text-decoration:none;font-size:12px;font-weight:700;padding:7px 9px;border:1px solid rgba(255,255,255,.25);border-radius:7px;">🏠 Marketplace</a>
+      <a href="compte.html" style="color:#fff;text-decoration:none;font-size:12px;font-weight:700;padding:7px 9px;border:1px solid rgba(255,255,255,.25);border-radius:7px;">👤 Kont Kliyan</a>
+      <a href="wallet.html" style="color:#fff;text-decoration:none;font-size:12px;font-weight:700;padding:7px 9px;border:1px solid rgba(255,255,255,.25);border-radius:7px;">💳 M.C Wallet</a>
+      <div class="notif-wrap">
+        <button class="notif-btn" onclick="toggleNotifications()" aria-label="Notifications">🔔 <span id="notif-badge" class="notif-badge" style="display:none;">0</span></button>
+      </div>
+      <button onclick="handleLogout()">Dekonekte</button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-view="produits">Pwodwi mwen</button>
+    <button class="tab" data-view="vantyo">Vant mwen</button>
+    <button class="tab" data-view="livre">Livrè</button>
+    <button class="tab" data-view="messaj">Messaj</button>
+    <button class="tab" data-view="abònman">Abònman</button>
+  </div>
+
+  <main>
+    <!-- PRODUITS -->
+    <div class="view active" id="view-produits">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="label">Pwodwi aktif</div><div class="value" id="kpi-products">0</div></div>
+        <div class="kpi-card"><div class="label">Vant total</div><div class="value" id="kpi-sales">0 G</div></div>
+      </div>
+
+      <section class="block">
+        <div class="block-head"><h2>📞 Kontak mwen</h2><span class="hint">Nimewo M.C Marketplace ka itilize pou kontakte w sou kòmand</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end;">
+          <div style="flex:1;min-width:220px;">
+            <label>Nimewo telefòn</label>
+            <input type="tel" id="vendor-telephone" placeholder="Eg. +509 37xx-xxxx" autocomplete="tel">
+          </div>
+          <button class="add-btn" type="button" onclick="saveVendorTelephone()">💾 Sove nimewo</button>
+        </div>
+        <div id="vendor-telephone-status" style="font-size:12px;color:var(--gris);margin-top:7px;"></div>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><h2 id="add-form-title">Ajoute yon pwodwi</h2></div>
+        <div class="prod-form">
+          <div>
+            <label id="nom-label">Non pwodwi a</label>
+            <input type="text" id="new-prod-nom" placeholder="Ex: Telefòn Android 64GB">
+          </div>
+          <div class="row2">
+            <div>
+              <label>Pri (HTG)</label>
+              <input type="number" id="new-prod-prix" placeholder="0">
+            </div>
+            <div>
+              <label>Kategori</label>
+              <select id="new-prod-cat"></select>
+            </div>
+          </div>
+          <div id="prep-time-field" style="display:none;">
+            <label>Tan preparasyon (minit)</label>
+            <input type="number" id="new-prod-prep" placeholder="Ex: 15">
+          </div>
+          <div id="options-field" style="display:none;">
+            <label>Opsyon (separe ak virgil — non:pri, ex: Ekstra fwomaj:50, San zonyon:0)</label>
+            <input type="text" id="new-prod-opsyon" placeholder="Ekstra fwomaj:50, San zonyon:0, Gwo pòsyon:100">
+          </div>
+          <div>
+            <label>Foto pwodwi a (opsyonèl)</label>
+            <input type="file" id="new-prod-img-file" accept="image/*" style="width:100%;padding:10px 0;">
+            <input type="hidden" id="new-prod-img">
+            <div id="img-upload-status" style="font-size:12px;color:var(--gris);margin-top:6px;"></div>
+            <img id="img-preview" style="display:none;max-width:120px;max-height:120px;border-radius:8px;margin-top:8px;object-fit:cover;">
+          </div>
+          <div>
+            <label>Kantite an stock (kite vid si san limit)</label>
+            <input type="number" id="new-prod-stock" placeholder="Ex: 20">
+          </div>
+          <div>
+            <label id="desc-label">Deskripsyon (opsyonèl)</label>
+            <textarea id="new-prod-desc" placeholder="Kèk detay sou pwodwi a..."></textarea>
+          </div>
+          <button class="add-btn" id="add-btn-label" onclick="addProduct()">+ Ajoute pwodwi a</button>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><h2>Pwodwi w yo</h2></div>
+        <div class="prod-list" id="prod-list"></div>
+        <div id="prod-empty" class="empty">Ou poko gen pwodwi. Ajoute premye pwodwi ou anwo a.</div>
+      </section>
+    </div>
+
+    <!-- VENTES -->
+    <div class="view" id="view-vantyo">
+      <section class="block">
+        <div class="block-head"><h2>Vant mwen yo</h2></div>
+        <table>
+          <thead><tr><th>Kòmand</th><th>Pwodwi</th><th>Montan</th><th>Statut</th><th>Livrè</th><th>Aksyon</th></tr></thead>
+          <tbody id="sales-table-body"></tbody>
+        </table>
+        <div id="sales-empty" class="empty">Ou poko gen okenn vant.</div>
+      </section>
+    </div>
+
+    <!-- LIVRÈ -->
+    <div class="view" id="view-livre">
+      <section class="block">
+        <div class="block-head"><h2>Ajoute yon livrè</h2></div>
+        <div class="prod-form">
+          <div>
+            <label>Non livrè a</label>
+            <input type="text" id="new-livre-nom" placeholder="Ex: Jean Baptiste">
+          </div>
+          <div>
+            <label>Telefòn</label>
+            <input type="text" id="new-livre-tel" placeholder="Ex: 3712-3456">
+          </div>
+          <button class="add-btn" onclick="addLivreur()">+ Ajoute livrè a</button>
+        </div>
+      </section>
+      <section class="block">
+        <div class="block-head"><h2>Livrè m yo</h2></div>
+        <div id="livreurs-list" class="prod-list"></div>
+        <div id="livreurs-empty" class="empty">Ou poko gen livrè anrejistre.</div>
+      </section>
+    </div>
+
+    <!-- MESSAJ / COMMUNICATION ADMIN -->
+    <div class="view" id="view-messaj">
+      <section class="block" style="margin-bottom:12px;">
+        <div class="block-head"><h2>📞 Communication avec M.C Marketplace</h2><span class="hint">Administrasyon santral</span></div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <div id="mc-central-phone-display" style="font-weight:700;margin-right:auto;">Nimewo santral poko konfigire.</div>
+          <button id="mc-central-call" class="btn-sm btn-neutral" disabled>📞 Rele</button>
+          <button id="mc-central-sms" class="btn-sm btn-neutral" disabled>SMS</button>
+          <button id="mc-central-whatsapp" class="btn-sm btn-neutral" disabled>WhatsApp</button>
+        </div>
+        <div style="font-size:11.5px;color:var(--gris);margin-top:8px;">Vandè a ka kontakte santral M.C dirèkteman. Konvèsasyon entèn Admin ↔ Vandè a rete disponib anba a.</div>
+      </section>
+      <section class="block" style="display:flex;min-height:400px;">
+        <div style="width:170px;border-right:1px solid var(--ligne);overflow-y:auto;">
+          <div id="conv-list"></div>
+          <div id="conv-empty" class="empty" style="font-size:12px;">Pa gen konvèsasyon.</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;">
+          <div id="vendor-chat-messages" style="flex:1;padding:16px;overflow-y:auto;max-height:340px;">
+            <div style="color:var(--gris);font-size:13px;text-align:center;padding:30px 0;">Chwazi yon konvèsasyon.</div>
+          </div>
+          <div id="vendor-chat-input-area" style="display:none;padding:12px;border-top:1px solid var(--ligne);gap:8px;">
+            <input type="text" id="vendor-chat-input" placeholder="Ekri repons ou..." style="flex:1;padding:9px 12px;border:1px solid var(--ligne);border-radius:8px;font-size:13.5px;">
+            <button id="vendor-chat-send-btn" style="background:var(--nuit-deep);color:#fff;border:none;padding:9px 16px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;">Voye</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ABONNEMENT -->
+    <div class="view" id="view-abònman">
+      <section class="block">
+        <div class="block-head"><h2>Pozisyon boutik ou</h2></div>
+        <div class="sub-box">
+          <p>Nou itilize pozisyon boutik ou pou kalkile frè livrezon selon distans ki genyen ant ou ak kliyan yo.</p>
+          <p id="shop-location-status" style="font-size:13px;color:var(--gris);margin-bottom:14px;">Pozisyon poko anrejistre.</p>
+          <button onclick="enrejistrePozisyonBoutik()">Sèvi ak pozisyon aktyèl mwen</button>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head"><h2>Abònman vandè</h2></div>
+        <div class="sub-box">
+          <div class="sub-status inactive" id="sub-status">An atant</div>
+          <p>Pou kontinye vann sou M.C Marketplace, chak vandè peye yon abònman chak mwa. Sa ede n kenbe platfòm nan solid pou tout moun.</p>
+          <div class="price-tag" id="sub-price">500 G <small>/ mwa</small></div>
+          <button disabled style="opacity:.55;cursor:not-allowed">Peman abònman poko aktive</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+
+<div id="notification-panel">
+  <div class="notif-head">
+    <span>🔔 Notifications</span>
+    <button onclick="markAllNotificationsRead()">Make tout li</button>
+  </div>
+  <div style="padding:8px 10px;border-bottom:1px solid var(--ligne);"><button onclick="enableVendorNotifications()" style="border:1px solid var(--ligne);background:#fff;border-radius:7px;padding:6px 9px;font-size:11px;font-weight:700;cursor:pointer;">🔔 Aktive notifications navigatè</button></div><div id="notification-list"><div class="notif-empty">Pa gen notification.</div></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="gps-utils.js"></script>
+<script type="module">window.MCPaymentConfigReady = import('mc-payment-config.js');</script>
+<script type="module">
+window.firebaseConfig = {
+  apiKey: "AIzaSyB_1RmQ3t-8Zzpg-mirSCv59KrioDsmjT8",
+  authDomain: "mc-marketplaceht.firebaseapp.com",
+  projectId: "mc-marketplaceht",
+  storageBucket: "mc-marketplaceht.firebasestorage.app",
+  messagingSenderId: "788708293876",
+  appId: "1:788708293876:web:09922c1e17ed6f51a2b2a1"
+};
+
+let db, auth, currentUser = null, currentVendorData = null;
+
+const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } =
+  await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+const { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, query, where, onSnapshot, runTransaction, updateDoc, orderBy, arrayUnion, writeBatch } =
+  await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+// Firebase Storage is intentionally not required in V3.4. Product images are compressed client-side and stored as a bounded data URL in Firestore.
+
+const app = initializeApp(firebaseConfig);
+auth = getAuth(app);
+db = getFirestore(app);
+
+async function syncPublicVendor(v) {
+  if (!v || !v.uid) return;
+  await setDoc(doc(db, "vendeurs_public", v.uid), {
+    uid: v.uid, nom: v.nom || null, ville: v.ville || null, type: v.type || null,
+    statut: v.statut || "pending", logoUrl: v.logoUrl || null,
+    verifie: v.verifie === true, ventesTotal: Number(v.ventesTotal || 0),
+    trustScore: v.trustScore == null ? null : Number(v.trustScore),
+    description: v.description || null, telephone: v.telephone || null,
+    lat: Number.isFinite(Number(v.lat)) ? Number(v.lat) : null,
+    lng: Number.isFinite(Number(v.lng)) ? Number(v.lng) : null,
+    updatedAt: new Date().toISOString()
+  }, { merge: true });
+}
+
+// ---------- AUTH TABS ----------
+window.switchAuthTab = function(which){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('form-'+which).classList.add('active');
+  document.getElementById('auth-error').style.display='none';
+  document.getElementById('auth-info').style.display='none';
+};
+
+// ---------- SIGNUP ----------
+window.handleVendorSignup = async function(){
+  const nomResponsab = document.getElementById('signup-nom-responsab').value.trim();
+  const nom = document.getElementById('signup-nom').value.trim();
+  const type = document.getElementById('signup-type').value;
+  const ville = document.getElementById('signup-ville').value.trim();
+  const telephone = document.getElementById('signup-telephone').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-pass').value;
+  const errBox = document.getElementById('auth-error');
+  const infoBox = document.getElementById('auth-info');
+  errBox.style.display='none'; infoBox.style.display='none';
+
+  if (!nomResponsab || !nom || !ville || !telephone || !email || !pass) {
+    errBox.textContent = "Tanpri ranpli tout chan yo.";
+    errBox.style.display='block';
+    return;
+  }
+
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    const vendorData = {
+      nom, nomResponsab, ville, telephone, email, type,
+      statut: "pending", verifie: false, vendeurId: cred.user.uid, ventesTotal: 0, profilVersion: 2, profilComplete: true,
+      dateCreation: new Date().toISOString(), uid: cred.user.uid
+    };
+    await setDoc(doc(db, "clients", cred.user.uid), { uid:cred.user.uid, nom:nomResponsab, telephone, email, profilVersion:2, profilComplete:true, dateCreation:new Date().toISOString() });
+    await setDoc(doc(db, "vendeurs", cred.user.uid), vendorData);
+    await syncPublicVendor(vendorData);
+    infoBox.textContent = "Kont ou kreye! W ap tann apwobasyon administratè a.";
+    infoBox.style.display='block';
+  } catch(e) {
+    errBox.textContent = traduiErreur(e.code);
+    errBox.style.display='block';
+  }
+};
+
+// ---------- EXISTING CLIENT -> VENDOR APPLICATION ----------
+window.submitVendorApplication = async function(){
+  if(!currentUser) return;
+  const nomResponsab=document.getElementById('apply-nom-responsab').value.trim();
+  const nomBoutik=document.getElementById('apply-nom-boutik').value.trim();
+  const type=document.getElementById('apply-type').value;
+  const ville=document.getElementById('apply-ville').value.trim();
+  const telephone=document.getElementById('apply-telephone').value.trim();
+  const err=document.getElementById('apply-error'), info=document.getElementById('apply-info');
+  err.style.display='none'; info.style.display='none';
+  if(!nomResponsab || !nomBoutik || !ville || !telephone){err.textContent='Tanpri ranpli tout chan yo.';err.style.display='block';return;}
+  try{
+    const email=currentUser.email||'';
+    const vendorData={uid:currentUser.uid,vendeurId:currentUser.uid,nom:nomBoutik,nomResponsab,ville,telephone,email,type,statut:'pending',verifie:false,ventesTotal:0,profilVersion:2,profilComplete:true,dateCreation:new Date().toISOString()};
+    await setDoc(doc(db,'vendeurs',currentUser.uid),vendorData);
+    const clientSnap=await getDoc(doc(db,'clients',currentUser.uid));
+    if(!clientSnap.exists()){
+      await setDoc(doc(db,'clients',currentUser.uid),{uid:currentUser.uid,nom:nomResponsab,telephone,email,profilVersion:2,profilComplete:true,dateCreation:new Date().toISOString()});
+    } else if(!clientSnap.data().nom){
+      await updateDoc(doc(db,'clients',currentUser.uid),{nom:nomResponsab,telephone,profilVersion:2,profilComplete:true});
+    }
+    await syncPublicVendor(vendorData);
+    currentVendorData=vendorData;
+    hideAll();
+    document.getElementById('status-icon').textContent='⏳';
+    document.getElementById('status-title').textContent='Demann vandè a ap tann apwobasyon';
+    document.getElementById('status-text').textContent='Menm kont ou a rete kont kliyan tou. Administrasyon an ap verifye demann vandè a.';
+    document.getElementById('status-screen').style.display='flex';
+    document.getElementById('status-screen').classList.add('fade-in');
+  }catch(e){console.error(e);err.textContent='Nou pa kapab kreye demann vandè a. Verifye koneksyon ak Firestore Rules yo.';err.style.display='block';}
+};
+
+// ---------- LOGIN ----------
+window.handleVendorLogin = async function(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errBox = document.getElementById('auth-error');
+  errBox.style.display='none';
+
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    errBox.textContent = traduiErreur(e.code);
+    errBox.style.display='block';
+  }
+};
+
+window.resetVendorPassword = async function(){
+  const email = document.getElementById('login-email').value.trim();
+  const errBox = document.getElementById('auth-error');
+  const infoBox = document.getElementById('auth-info');
+  errBox.style.display='none'; infoBox.style.display='none';
+  if (!email) {
+    errBox.textContent = "Antre email ou nan chan anwo a dabò.";
+    errBox.style.display='block';
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    infoBox.textContent = "Yon lyen pou chanje mo depas voye nan " + email + ".";
+    infoBox.style.display='block';
+  } catch(e) {
+    errBox.textContent = "Pa gen kont ak email sa a, oswa yon erè pase.";
+    errBox.style.display='block';
+  }
+};
+
+function traduiErreur(code){
+  if (code === 'auth/email-already-in-use') return "Email sa a deja itilize.";
+  if (code === 'auth/weak-password') return "Mo depas la twò kout (6 karaktè minimòm).";
+  if (code === 'auth/invalid-email') return "Fòma email lan pa bon.";
+  if (code === 'auth/invalid-credential' || code === 'auth/wrong-password') return "Email oswa mo depas pa kòrèk.";
+  if (code === 'auth/user-not-found') return "Pa gen kont ak email sa a.";
+  return "Yon erè pase. Eseye ankò.";
+}
+
+window.handleLogout = async function(){
+  if (vendorNotificationsUnsubscribe) { vendorNotificationsUnsubscribe(); vendorNotificationsUnsubscribe = null; }
+  vendorNotifications = [];
+  renderVendorNotifications();
+  showToast('N a wè pita!');
+  setTimeout(async ()=> { await signOut(auth); }, 500);
+};
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 2600);
+}
+
+window.saveVendorTelephone = async function(){
+  if(!currentUser) return;
+  const input=document.getElementById('vendor-telephone');
+  const status=document.getElementById('vendor-telephone-status');
+  const raw=input?.value.trim() || '';
+  const phone=raw.replace(/[^0-9+]/g,'');
+  const digits=phone.replace(/\D/g,'');
+  if(digits.length < 8 || digits.length > 15){
+    status.textContent='⚠️ Antre yon nimewo telefòn valab.';
+    return;
+  }
+  try{
+    await updateDoc(doc(db,'vendeurs',currentUser.uid),{telephone:phone,updatedAt:new Date().toISOString(),updatedBy:currentUser.uid});
+    currentVendorData={...currentVendorData,telephone:phone};
+    await syncPublicVendor(currentVendorData);
+    status.textContent='✅ Nimewo a anrejistre. Administrasyon an ka kontakte w dirèkteman.';
+    showToast('Nimewo telefòn sove.');
+  }catch(e){
+    console.error(e);
+    status.textContent='❌ Pa kapab sove nimewo a. Verifye Firestore Rules yo.';
+  }
+};
+
+window.completeVendorProfileMigration = async function(){
+  if(!currentUser || !currentVendorData) return;
+  const err=document.getElementById('vendor-reset-error'); err.style.display='none';
+  const nomResponsab=document.getElementById('vendor-reset-nom-responsab').value.trim();
+  const nom=document.getElementById('vendor-reset-nom-boutik').value.trim();
+  const type=document.getElementById('vendor-reset-type').value;
+  const ville=document.getElementById('vendor-reset-ville').value.trim();
+  const raw=document.getElementById('vendor-reset-telephone').value.trim();
+  const telephone=raw.replace(/[^0-9+]/g,'');
+  const digits=telephone.replace(/\D/g,'');
+  if(nomResponsab.length<2 || nomResponsab.length>150){err.textContent='Non responsab la dwe gen ant 2 ak 150 karaktè.';err.style.display='block';return;}
+  if(!nom || nom.length>200 || !ville){err.textContent='Ranpli non biznis la ak vil la.';err.style.display='block';return;}
+  if(digits.length<8 || digits.length>15){err.textContent='Antre yon nimewo telefòn valab.';err.style.display='block';return;}
+  try{
+    const updated={vendeurId:currentUser.uid,nom,nomResponsab,type,ville,telephone,profilVersion:2,profilComplete:true,profileUpdatedAt:new Date().toISOString(),updatedAt:new Date().toISOString(),updatedBy:currentUser.uid};
+    await updateDoc(doc(db,'vendeurs',currentUser.uid),updated);
+    const clientRef=doc(db,'clients',currentUser.uid);
+    const existingClient=await getDoc(clientRef);
+    const clientPayload={uid:currentUser.uid,nom:nomResponsab,telephone,profilVersion:2,profilComplete:true};
+    if(!existingClient.exists()) clientPayload.email=currentUser.email||'';
+    await setDoc(clientRef,clientPayload,{merge:true});
+    currentVendorData={...currentVendorData,...updated};
+    await syncPublicVendor(currentVendorData);
+    document.getElementById('vendor-profile-reset-screen').style.display='none';
+    setupFormForVendorType();
+    if(currentVendorData.statut==='approved'){
+      document.getElementById('app').style.display='block'; document.getElementById('app').classList.add('fade-in');
+      showToast('Pwofil vandè ou mete ajou avèk siksè.'); registerVendorServiceWorker(); await loadLivreurs(); loadVendorData(); loadVendorNotifications(); loadMCCentralContact(); loadConversations(); updateShopLocationStatus();
+    } else {
+      document.getElementById('status-icon').textContent=currentVendorData.statut==='suspended'?'⛔':'⏳';
+      document.getElementById('status-title').textContent=currentVendorData.statut==='suspended'?'Kont ou sispann':'Kont ou ap tann apwobasyon';
+      document.getElementById('status-text').textContent=currentVendorData.statut==='suspended'?'Kontakte administratè platfòm nan pou plis enfòmasyon.':'Enfòmasyon pwofil ou yo mete ajou. Yon administratè ap verifye kont lan.';
+      document.getElementById('status-screen').style.display='flex'; document.getElementById('status-screen').classList.add('fade-in');
+    }
+  }catch(e){console.error(e);err.textContent='Pa kapab mete pwofil vandè a ajou. Verifye Firestore Rules yo.';err.style.display='block';}
+};
+
+// ---------- AUTH STATE ----------
+onAuthStateChanged(auth, async (user)=>{
+  hideAll();
+  if (!user) {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('auth-screen').classList.add('fade-in');
+    return;
+  }
+  currentUser = user;
+  let vendorDoc;
+  try {
+    vendorDoc = await getDoc(doc(db, "vendeurs", user.uid));
+  } catch (e) {
+    console.error('Erreur lecture profil vendeur:', e);
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('auth-screen').classList.add('fade-in');
+    const errBox = document.getElementById('auth-error');
+    errBox.textContent = 'Impossible de charger votre espace vendeur. Vérifiez votre connexion et les règles Firestore.';
+    errBox.style.display = 'block';
+    return;
+  }
+  if (!vendorDoc.exists()) {
+    let clientData={};
+    try { const cs=await getDoc(doc(db,'clients',user.uid)); if(cs.exists()) clientData=cs.data(); } catch(e) {}
+    document.getElementById('vendor-apply-screen').style.display='flex';
+    document.getElementById('vendor-apply-screen').classList.add('fade-in');
+    document.getElementById('apply-nom-responsab').value=clientData.nom || '';
+    document.getElementById('apply-nom-boutik').value='';
+    document.getElementById('apply-ville').value='';
+    document.getElementById('apply-telephone').value=clientData.telephone || '';
+    return;
+  }
+  currentVendorData = vendorDoc.data();
+  try { await syncPublicVendor(currentVendorData); } catch(e) { console.warn('Sync vendeur public:', e); }
+  const phoneInput=document.getElementById('vendor-telephone');
+  if(phoneInput) phoneInput.value=currentVendorData.telephone || currentVendorData.telefon || '';
+  setupFormForVendorType();
+
+  if (currentVendorData.statut === 'approved') {
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('app').classList.add('fade-in');
+    showToast('Byenveni, ' + currentVendorData.nom + '!');
+    registerVendorServiceWorker();
+    await loadLivreurs();
+    loadVendorData();
+    loadVendorNotifications();
+    loadMCCentralContact();
+    loadConversations();
+    updateShopLocationStatus();
+  } else if (currentVendorData.statut === 'suspended') {
+    document.getElementById('status-icon').textContent = '⛔';
+    document.getElementById('status-title').textContent = 'Kont ou sispann';
+    document.getElementById('status-text').textContent = 'Kontakte administratè platfòm nan pou plis enfòmasyon.';
+    document.getElementById('status-screen').style.display = 'flex';
+    document.getElementById('status-screen').classList.add('fade-in');
+  } else {
+    document.getElementById('status-icon').textContent = '⏳';
+    document.getElementById('status-title').textContent = 'Kont ou ap tann apwobasyon';
+    document.getElementById('status-text').textContent = "Yon administratè ap verifye enfòmasyon w yo. Ou pral ka ajoute pwodwi yon fwa yo apwouve kont ou.";
+    document.getElementById('status-screen').style.display = 'flex';
+    document.getElementById('status-screen').classList.add('fade-in');
+  }
+});
+
+function hideAll(){
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('vendor-apply-screen').style.display = 'none';
+  document.getElementById('status-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+}
+
+// ---------- TAB NAVIGATION ----------
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('view-'+tab.dataset.view).classList.add('active');
+  });
+});
+
+// ---------- NOTIFICATIONS ----------
+let vendorNotificationsUnsubscribe = null;
+let vendorNotifications = [];
+let notificationInitialised = false;
+
+function registerVendorServiceWorker(){
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+window.toggleNotifications = function(){
+  const panel = document.getElementById('notification-panel');
+  if (!panel) return;
+  panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+};
+
+function formatNotificationTime(value){
+  if (!value) return '';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return '';
+  const diff = Math.max(0, Date.now() - d.getTime());
+  const min = Math.floor(diff/60000);
+  if (min < 1) return 'Kounye a';
+  if (min < 60) return `Sa fè ${min} min`;
+  const h = Math.floor(min/60);
+  if (h < 24) return `Sa fè ${h} è`; 
+  return d.toLocaleDateString('fr-FR', {day:'2-digit', month:'2-digit', year:'numeric'});
+}
+
+function renderVendorNotifications(){
+  const list = document.getElementById('notification-list');
+  const badge = document.getElementById('notif-badge');
+  if (!list || !badge) return;
+  const unread = vendorNotifications.filter(n => n.read !== true).length;
+  badge.textContent = unread > 99 ? '99+' : String(unread);
+  badge.style.display = unread ? 'flex' : 'none';
+  if (!vendorNotifications.length){
+    list.innerHTML = '<div class="notif-empty">Pa gen notification ankò.</div>';
+    return;
+  }
+  list.innerHTML = vendorNotifications.map(n => {
+    const title = n.type === 'admin_message' ? '🏢 Mesaj M.C Marketplace' : (n.type === 'admin_status' ? '⚙️ Administrasyon chanje statut' : (n.type === 'order_status' ? '📦 Statut kòmand chanje' : '🛍️ Nouvo kòmand'));
+    const main = n.type === 'admin_message' || n.type === 'admin_status' || n.type === 'order_status' ? (n.messagePreview || n.statut || '') : `${n.produitNom || 'Pwodwi'} · ${(Number(n.montant)||0).toLocaleString('fr-FR')} G`;
+    const who = n.type === 'admin_message' || n.type === 'admin_status' ? 'M.C Marketplace' : (n.type === 'order_status' ? 'Kliyan' : `Kliyan: ${n.clientNom || '—'}`);
+    return `<div class="notif-item ${n.read === true ? '' : 'unread'}" onclick="openVendorNotification('${n.id}')">
+      <strong>${title} ${n.numeroKomand ? '— '+n.numeroKomand : ''}</strong>
+      <span>${main}</span>
+      <span>${who} · ${formatNotificationTime(n.createdAt)}</span>
+    </div>`;
+  }).join('');
+}
+
+function notifyVendorBrowser(n){
+  if (!notificationInitialised) return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const title = n.type === 'admin_message' ? 'M.C Marketplace — Mesaj administrasyon' : (n.type === 'admin_status' ? 'M.C Marketplace — Statut chanje' : 'M.C Marketplace — Nouvo kòmand');
+  const body = n.type === 'admin_message' || n.type === 'admin_status' ? (n.messagePreview || n.statut || '') : `${n.numeroKomand || 'Kòmand'} · ${n.produitNom || 'Pwodwi'} · ${(Number(n.montant)||0).toLocaleString('fr-FR')} G`;
+  navigator.serviceWorker?.ready.then(reg => {
+    reg.showNotification(title, {
+      body,
+      icon: 'icons/icon-192.png',
+      badge: 'icons/icon-192.png',
+      tag: 'mc-order-' + (n.orderId || n.id),
+      data: { orderId: n.orderId, url: 'vendeur.html' }
+    }).catch(()=>{});
+  }).catch(()=>{});
+}
+
+window.enableVendorNotifications = async function(){
+  if (!('Notification' in window)) { showToast('Navigatè sa a pa sipòte notifications.'); return; }
+  const permission = await Notification.requestPermission();
+  if (permission === 'granted') showToast('🔔 Notifications aktive!');
+  else showToast('Notification yo pa aktive.');
+};
+
+window.openVendorNotification = async function(id){
+  const n = vendorNotifications.find(x => x.id === id);
+  if (!n) return;
+  try {
+    if (n.read !== true) await updateDoc(doc(db, 'notifications', id), { read: true, readAt: new Date().toISOString() });
+  } catch(e) {}
+  document.getElementById('notification-panel').style.display = 'none';
+  document.querySelector('.tab[data-view="vantyo"]')?.click();
+  setTimeout(()=> {
+    const row = [...document.querySelectorAll('#sales-table-body tr')].find(tr => tr.textContent.includes(n.numeroKomand || ''));
+    row?.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 200);
+};
+
+window.markAllNotificationsRead = async function(){
+  const unread = vendorNotifications.filter(n => n.read !== true);
+  for (const n of unread) {
+    try { await updateDoc(doc(db, 'notifications', n.id), { read: true, readAt: new Date().toISOString() }); } catch(e) {}
+  }
+};
+
+function loadVendorNotifications(){
+  if (vendorNotificationsUnsubscribe) vendorNotificationsUnsubscribe();
+  const q = query(collection(db, 'notifications'), where('vendeurId', '==', currentUser.uid));
+  notificationInitialised = false;
+  vendorNotificationsUnsubscribe = onSnapshot(q, snap => {
+    const incoming = [];
+    snap.forEach(d => incoming.push({id:d.id, ...d.data()}));
+    incoming.sort((a,b)=> new Date(b.createdAt||0) - new Date(a.createdAt||0));
+    if (notificationInitialised) {
+      snap.docChanges().filter(ch => ch.type === 'added').forEach(ch => notifyVendorBrowser({id:ch.doc.id, ...ch.doc.data()}));
+    }
+    vendorNotifications = incoming;
+    renderVendorNotifications();
+    notificationInitialised = true;
+  }, err => console.warn('Notifications vendeur:', err));
+}
+
+// ---------- PRODUCTS ----------
+function setupFormForVendorType(){
+  const isRestoran = currentVendorData.type === 'restoran';
+  const catSelect = document.getElementById('new-prod-cat');
+
+  if (isRestoran) {
+    document.getElementById('add-form-title').textContent = 'Ajoute yon manje nan meni a';
+    document.getElementById('nom-label').textContent = 'Non manje a';
+    document.getElementById('new-prod-nom').placeholder = 'Ex: Diri kole ak pwa, poul fri';
+    document.getElementById('desc-label').textContent = 'Deskripsyon (engredyan, opsyon...)';
+    document.getElementById('add-btn-label').textContent = '+ Ajoute nan meni a';
+    document.getElementById('prep-time-field').style.display = 'block';
+    document.getElementById('options-field').style.display = 'block';
+    catSelect.innerHTML = `
+      <option>Pla Prensipal</option>
+      <option>Aperitif</option>
+      <option>Bwason</option>
+      <option>Desè</option>
+      <option>Fritay</option>
+    `;
+  } else {
+    document.getElementById('add-form-title').textContent = 'Ajoute yon pwodwi';
+    document.getElementById('nom-label').textContent = 'Non pwodwi a';
+    document.getElementById('new-prod-nom').placeholder = 'Ex: Telefòn Android 64GB';
+    document.getElementById('desc-label').textContent = 'Deskripsyon (opsyonèl)';
+    document.getElementById('add-btn-label').textContent = '+ Ajoute pwodwi a';
+    document.getElementById('prep-time-field').style.display = 'none';
+    document.getElementById('options-field').style.display = 'none';
+    catSelect.innerHTML = `
+      <option>Elektwonik</option>
+      <option>Mòd & Abiman</option>
+      <option>Kay & Kwizin</option>
+      <option>Bote & Sante</option>
+      <option>Manje & Boutèy</option>
+      <option>Zouti & Konstriksyon</option>
+      <option>Timoun & Jwèt</option>
+    `;
+  }
+}
+
+async function uploadProductImage(file){
+  if(!currentUser) throw new Error('AUTH_REQUIRED');
+  if(!file || !file.type || !file.type.startsWith('image/')) throw new Error('INVALID_IMAGE');
+  if(file.size > 12*1024*1024) throw new Error('IMAGE_TOO_LARGE');
+
+  // V3.4: no Firebase Storage dependency. Compress locally so Firestore
+  // remains under its 1 MiB document limit. The resulting data URL is the
+  // value saved in products.imageUrl.
+  const bitmap = await createImageBitmap(file);
+  const maxSide = 1280;
+  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+  const w = Math.max(1, Math.round(bitmap.width * scale));
+  const h = Math.max(1, Math.round(bitmap.height * scale));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d', {alpha:false});
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0,0,w,h);
+  ctx.drawImage(bitmap,0,0,w,h);
+  bitmap.close();
+
+  let quality = 0.78;
+  let dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+  // Keep a safe margin below Firestore's 1 MiB document limit.
+  while (dataUrl.length > 520000 && quality > 0.48) {
+    quality -= 0.05;
+    dataUrl = canvas.toDataURL('image/jpeg', quality);
+  }
+  if (dataUrl.length > 520000) {
+    const smaller = document.createElement('canvas');
+    const factor = 0.72;
+    smaller.width = Math.max(1, Math.round(w*factor));
+    smaller.height = Math.max(1, Math.round(h*factor));
+    const sctx = smaller.getContext('2d', {alpha:false});
+    sctx.fillStyle = '#ffffff';
+    sctx.fillRect(0,0,smaller.width,smaller.height);
+    sctx.drawImage(canvas,0,0,smaller.width,smaller.height);
+    dataUrl = smaller.toDataURL('image/jpeg',0.68);
+  }
+  if (dataUrl.length > 600000) throw new Error('IMAGE_COMPRESS_FAILED');
+  return dataUrl;
+}
+
+document.getElementById('new-prod-img-file').addEventListener('change', async (e)=>{
+  const file=e.target.files[0], statusEl=document.getElementById('img-upload-status'), previewEl=document.getElementById('img-preview');
+  if(!file)return;
+  if(!file.type.startsWith('image/')){statusEl.textContent='Chwazi yon fichye imaj.';statusEl.style.color='var(--corail)';e.target.value='';return;}
+  if(file.size>8*1024*1024){statusEl.textContent='Foto a twò gwo (maksimòm 8 Mo).';statusEl.style.color='var(--corail)';e.target.value='';return;}
+  statusEl.textContent='Ap voye foto a...';statusEl.style.color='var(--gris)';
+  try{const url=await uploadProductImage(file);document.getElementById('new-prod-img').value=url;previewEl.src=url;previewEl.style.display='block';statusEl.textContent='✓ Foto voye avèk siksè!';statusEl.style.color='var(--vert)';}
+  catch(err){console.error('Upload image:',err);statusEl.textContent='❌ Foto a pa ka prepare. Eseye yon lòt foto ki pi piti.';statusEl.style.color='var(--corail)';}
+});
+
+window.addProduct = async function(){
+  const nom = document.getElementById('new-prod-nom').value.trim();
+  const prix = Number(document.getElementById('new-prod-prix').value);
+  const categorie = document.getElementById('new-prod-cat').value;
+  const imageUrl = document.getElementById('new-prod-img').value.trim();
+  const stockVal = document.getElementById('new-prod-stock').value.trim();
+  const stock = stockVal === '' ? null : Number(stockVal);
+  const description = document.getElementById('new-prod-desc').value.trim();
+  const tanPreparasyon = currentVendorData.type === 'restoran' ? (Number(document.getElementById('new-prod-prep').value) || null) : null;
+
+  let opsyon = [];
+  if (currentVendorData.type === 'restoran') {
+    const opsyonRaw = document.getElementById('new-prod-opsyon').value.trim();
+    if (opsyonRaw) {
+      opsyon = opsyonRaw.split(',').map(part => {
+        const [nomOpt, prixOpt] = part.split(':').map(s => s.trim());
+        return { nom: nomOpt, prix: Number(prixOpt) || 0 };
+      }).filter(o => o.nom);
+    }
+  }
+
+  if (!nom || !Number.isFinite(prix) || prix <= 0) {
+    alert("Tanpri antre non pwodwi a ak yon pri ki pi gran pase 0.");
+    return;
+  }
+  if (stock !== null && (!Number.isInteger(stock) || stock < 0)) {
+    alert("Stock la dwe yon kantite antye ki pa negatif.");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "produits"), {
+      nom, prix, categorie, description, imageUrl, tanPreparasyon, stock, opsyon,
+      vendeurId: currentUser.uid,
+      vendeurNom: currentVendorData.nom,
+      vendeurVille: currentVendorData.ville,
+      vendeurType: currentVendorData.type || 'boutik',
+      vendeurUid: currentUser.uid,
+      dateAjout: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+    document.getElementById('new-prod-nom').value = '';
+    document.getElementById('new-prod-prix').value = '';
+    document.getElementById('new-prod-img').value = '';
+    document.getElementById('new-prod-img-file').value = '';
+    document.getElementById('img-preview').style.display = 'none';
+    document.getElementById('img-upload-status').textContent = '';
+    document.getElementById('new-prod-stock').value = '';
+    document.getElementById('new-prod-desc').value = '';
+    if (document.getElementById('new-prod-prep')) document.getElementById('new-prod-prep').value = '';
+    if (document.getElementById('new-prod-opsyon')) document.getElementById('new-prod-opsyon').value = '';
+    loadVendorData();
+  } catch(e) {
+    alert("Erè pandan ajoute pwodwi a.");
+  }
+};
+
+window.deleteProduct = async function(productId){
+  if (!confirm("Efase pwodwi sa a?")) return;
+  try {
+    await deleteDoc(doc(db, "produits", productId));
+    loadVendorData();
+  } catch(e) {
+    alert("Erè pandan efase pwodwi a.");
+  }
+};
+
+window.ajisteStock = async function(productId, stockAktyèl){
+  const nouvo = prompt("Kantite stock kounye a (kite vid pou san limit):", stockAktyèl == null ? '' : stockAktyèl);
+  if (nouvo === null) return;
+  const valeur = nouvo.trim() === '' ? null : Number(nouvo);
+  if (valeur !== null && (!Number.isInteger(valeur) || valeur < 0)) {
+    alert('Stock la dwe yon kantite antye ki pa negatif.');
+    return;
+  }
+  try {
+    await updateDoc(doc(db, "produits", productId), { stock: valeur, updatedAt: new Date().toISOString(), updatedBy: currentUser.uid });
+    loadVendorData();
+  } catch(e) {
+    alert("Erè pandan ajiste stock la.");
+  }
+};
+
+async function loadVendorData(){
+  // Load this vendor's products
+  // Vendor identity is always the Firebase Auth UID. We accept both fields
+  // during migration so old/new documents are visible immediately.
+  const productQueries = [
+    query(collection(db, "produits"), where("vendeurId", "==", currentUser.uid)),
+    query(collection(db, "produits"), where("vendeurUid", "==", currentUser.uid))
+  ];
+  const productMap = new Map();
+  for (const q of productQueries) {
+    const snap = await getDocs(q);
+    snap.forEach(d => productMap.set(d.id, { id:d.id, ...d.data() }));
+  }
+  const products = [...productMap.values()];
+  renderProducts(products);
+  document.getElementById('kpi-products').textContent = products.length;
+
+  // Orders: listen to both identities during the migration.
+  const orderMap = new Map();
+  const orderListeners = [];
+  const renderVendorOrders = ()=>{
+    const orders=[...orderMap.values()];
+    renderOrders(orders);
+    const totalVentes = orders.reduce((sum,o) => sum + (Number(o.montantTotal != null ? o.montantTotal : o.montant)||0), 0);
+    document.getElementById('kpi-sales').textContent = totalVentes.toLocaleString('fr-FR') + " G";
+  };
+  for (const field of ['vendeurId','vendeurUid']) {
+    const qo = query(collection(db, "commandes"), where(field, "==", currentUser.uid));
+    orderListeners.push(onSnapshot(qo, (snapO)=>{
+      snapO.forEach(d => orderMap.set(d.id, { id:d.id, ...d.data() }));
+      renderVendorOrders();
+    }, err=>console.warn(`Commandes vendeur (${field}):`,err)));
+  }
+
+  // Subscription status (placeholder - vendor statut is approved so treat as active for now)
+  const subEl = document.getElementById('sub-status');
+  subEl.textContent = "Kont ou aktif";
+  subEl.className = "sub-status active";
+
+  // Load platform settings for subscription price
+  try {
+    const paramDoc = await getDoc(doc(db, "parametres", "plateforme"));
+    if (paramDoc.exists()) {
+      const p = paramDoc.data();
+      document.getElementById('sub-price').innerHTML = (p.abonnementVendeurHTG||500) + " G <small>/ mwa</small>";
+    }
+  } catch(e){}
+}
+
+function renderProducts(products){
+  const list = document.getElementById('prod-list');
+  const empty = document.getElementById('prod-empty');
+  if (products.length === 0) { empty.style.display='block'; list.innerHTML=''; return; }
+  empty.style.display='none';
+  list.innerHTML = products.map(p => `
+    <div class="prod-item">
+      <div class="info" style="display:flex;align-items:center;gap:10px;">
+        ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;" onerror="this.style.display='none'">` : ''}
+        <div>
+          <strong>${p.nom}</strong>
+          <span>${p.categorie} · ${p.stock == null ? 'San limit' : (p.stock > 0 ? p.stock + ' an stock' : '⚠️ Pa gen stock')}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span class="price">${p.prix.toLocaleString('fr-FR')} G</span>
+        <button onclick="ajisteStock('${p.id}', ${p.stock ?? 'null'})" style="background:#EDE6D8;border:none;padding:6px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;">Ajiste stock</button>
+        <button class="del-btn" onclick="deleteProduct('${p.id}')">Efase</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+const SELLER_STATUSES = ['an tann','konfime','aksepte','ap prepare','pare','asiyen livrè','nan men livrè','an livrezon','livre','anile','retounen','ranbouse'];
+function sellerStatusLabel(s){
+  const labels = {'an tann':'🟡 An atant','ap prepare':'🔵 Ap prepare','nan men livrè':'🚚 Nan men livrè','livre':'🟢 Livre','anile':'🔴 Anile'};
+  return labels[s] || s || '🟡 An atant';
+}
+function canSellerChangeStatus(o, next){
+  const current = o.statut || 'an tann';
+  if (['livre','anile','ranbouse'].includes(current)) return false;
+  if (next === 'nan men livrè' && !o.livreurId) return false;
+  const allowed = {
+    'an tann':['ap prepare','anile'],
+    'ap prepare':['nan men livrè','anile'],
+    'konfime':['ap prepare','anile'],
+    'aksepte':['ap prepare','anile'],
+    'pare':['nan men livrè','anile'],
+    'asiyen livrè':['nan men livrè','anile'],
+    'nan men livrè':['an livrezon','livre','anile'],
+    'an livrezon':['livre','retounen'],
+    'retounen':['ranbouse']
+  };
+  return (allowed[current] || ['ap prepare','anile']).includes(next);
+}
+
+window.updateSellerOrderStatus = async function(orderId, newStatus){
+  const orderRef = doc(db, 'commandes', orderId);
+  try {
+    const snap = await getDoc(orderRef);
+    if (!snap.exists()) throw new Error('ORDER_NOT_FOUND');
+    const o = snap.data();
+    if (o.vendeurId !== currentUser.uid) throw new Error('NOT_OWNER');
+    if (!SELLER_STATUSES.includes(newStatus)) throw new Error('INVALID_STATUS');
+    if (!canSellerChangeStatus(o, newStatus)) {
+      if (newStatus === 'nan men livrè' && !o.livreurId) throw new Error('DRIVER_REQUIRED');
+      throw new Error('INVALID_TRANSITION');
+    }
+    const now = new Date().toISOString();
+    const history = Array.isArray(o.statusHistory) ? o.statusHistory : [];
+    const batch = writeBatch(db);
+    // Explicit vendor ↔ client relationship: created when the vendor handles the order.
+    if (o.clientId) {
+      batch.set(doc(db,'vendeur_clients',`${currentUser.uid}_${o.clientId}`), {
+        vendeurId:currentUser.uid, clientId:o.clientId, clientNom:o.clientNom||null, clientEmail:o.clientEmail||null,
+        telephone:o.clientTelephone||null, derniereCommandeId:orderId, derniereCommandeAt:now, updatedAt:now, actif:true
+      }, {merge:true});
+    }
+    batch.update(orderRef, {
+      statut: newStatus,
+      statusHistory: arrayUnion({status:newStatus, timestamp:now, updatedBy:'vendeur', updatedByUid:currentUser.uid}),
+      lastStatusAt: now,
+      lastStatusBy: currentUser.uid
+    });
+    if (o.clientId) {
+      batch.set(doc(db,'notifications',`${orderId}_status_${Date.now()}`), {
+        type:'order_status', clientId:o.clientId, vendeurId:currentUser.uid, orderId,
+        numeroKomand:o.numeroKomand || orderId.substring(0,8), produitNom:o.produitNom || '',
+        statut:newStatus, messagePreview:`Statut kòmand lan chanje: ${sellerStatusLabel(newStatus)}`,
+        read:false, createdAt:now
+      });
+    }
+    await batch.commit();
+    showToast('✓ Statut mete ajou epi kliyan an resevwa notification.');
+  } catch(e) {
+    const msg = {
+      DRIVER_REQUIRED:'Chwazi yon livrè anvan ou mete kòmand lan “nan men livrè”.',
+      INVALID_TRANSITION:'Chanjman statut sa a pa pèmèt pou etap aktyèl kòmand lan.',
+      NOT_OWNER:'Kòmand sa a pa pou kont vandè sa a.',
+      ORDER_NOT_FOUND:'Kòmand lan pa egziste ankò.'
+    }[e.message] || 'Erè pandan chanjman statut la.';
+    alert(msg);
+    loadVendorData();
+  }
+};
+
+function renderOrders(orders){
+  const body = document.getElementById('sales-table-body');
+  const empty = document.getElementById('sales-empty');
+  orders.sort((a,b)=>new Date(b.dateCommande||0)-new Date(a.dateCommande||0));
+  if (orders.length === 0) { empty.style.display='block'; body.innerHTML=''; return; }
+  empty.style.display='none';
+  body.innerHTML = orders.map(o => {
+    const current = o.statut || 'an tann';
+    const options = SELLER_STATUSES.map(s => `<option value="${s}" ${current===s?'selected':''} ${canSellerChangeStatus(o,s)?'':'disabled'}>${sellerStatusLabel(s)}</option>`).join('');
+    return `
+    <tr>
+      <td><strong>${o.numeroKomand || '#'+o.id.substring(0,8)}</strong><br><small>${o.clientNom || 'Kliyan'}</small></td>
+      <td>${o.produitNom || '—'}${o.quantite ? ` × ${o.quantite}` : ''}</td>
+      <td>${(Number(o.montantTotal != null ? o.montantTotal : o.montant)||0).toLocaleString('fr-FR')} G${o.paymentStatus ? `<div style="font-size:11px;font-weight:800;color:${o.paymentStatus==='paid'?'var(--vert)':(o.paymentStatus==='failed'?'var(--corail)':'var(--gris)')};margin-top:3px;">${o.paymentStatus==='paid'?'✅ Achat reyisi':(o.paymentStatus==='failed'?'❌ Achat echwe':'⏳ Peman '+o.paymentStatus)}</div>` : ''}</td>
+      <td><select onchange="updateSellerOrderStatus('${o.id}', this.value)" style="padding:5px 7px;border-radius:6px;border:1px solid var(--ligne);font-size:12px;max-width:155px;">${options}</select><div style="font-size:11px;color:var(--gris);margin-top:4px;">${sellerStatusLabel(current)}</div></td>
+      <td>
+        <select onchange="assignLivreur('${o.id}', this.value)" style="padding:5px 7px;border-radius:6px;border:1px solid var(--ligne);font-size:12px;">
+          <option value="">— Chwazi —</option>
+          ${myLivreurs.map(l => `<option value="${l.id}" ${o.livreurId===l.id?'selected':''}>${l.numero} — ${l.nom}</option>`).join('')}
+        </select>
+        ${o.livreurNom ? `<div style="font-size:11px;color:var(--gris);margin-top:3px;">${o.livreurNom}</div><button class="btn-sm btn-neutral" style="margin-top:4px;" onclick="copyOrderDriverLink('${o.id}','${o.livreurId||''}')">🔗 Lyen pou livrè</button>` : ''}
+      </td>
+      <td><button class="btn-sm btn-neutral" onclick="openOrderConversation('${o.clientId || ''}')">💬 Kliyan</button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.openOrderConversation = function(clientId){
+  if (!clientId) return;
+  const conv = myConversations.find(c => c.clientId === clientId);
+  if (conv) { document.querySelector('.tab[data-view="messaj"]')?.click(); openConversation(conv.id); return; }
+  document.querySelector('.tab[data-view="messaj"]')?.click();
+  showToast('Konvèsasyon kliyan sa a poko chaje.');
+};
+
+// ---------- LIVRÈ ----------
+let myLivreurs = [];
+
+function getNextLivreurNumber(){
+  const now = new Date();
+  const stamp = now.toISOString().replace(/[-:TZ.]/g, '').slice(0,14);
+  const random = Math.random().toString(36).slice(2,7).toUpperCase();
+  return `LIV#${stamp}-${random}`;
+}
+
+window.addLivreur = async function(){
+  const nom = document.getElementById('new-livre-nom').value.trim();
+  const telefon = document.getElementById('new-livre-tel').value.trim();
+  if (!nom) { alert("Antre non livrè a."); return; }
+  try {
+    const numero = await getNextLivreurNumber();
+    await addDoc(collection(db, "livreurs"), {
+      nom, telefon, numero,
+      vendeurId: currentUser.uid,
+      vendeurNom: currentVendorData.nom,
+      statut: 'aktif',
+      disponib: true,
+      enSevis: false,
+      dateCreation: new Date().toISOString(),
+      ownerUid: currentUser.uid
+    });
+    document.getElementById('new-livre-nom').value = '';
+    document.getElementById('new-livre-tel').value = '';
+    loadLivreurs();
+  } catch(e) {
+    alert("Erè pandan ajoute livrè a.");
+  }
+};
+
+async function loadLivreurs(){
+  const list = document.getElementById('livreurs-list');
+  const empty = document.getElementById('livreurs-empty');
+  const q = query(collection(db, "livreurs"), where("vendeurId", "==", currentUser.uid));
+  const snap = await getDocs(q);
+  myLivreurs = [];
+  snap.forEach(d => myLivreurs.push({ id: d.id, ...d.data() }));
+  if (myLivreurs.length === 0) { empty.style.display='block'; list.innerHTML=''; return; }
+  empty.style.display='none';
+  list.innerHTML = myLivreurs.map(l => `
+    <div class="prod-item" style="flex-wrap:wrap;gap:8px;">
+      <div class="info">
+        <strong>${l.numero} — ${l.nom}</strong>
+        <span>${l.telefon || 'Pa gen telefòn'} · ${l.enSevis ? '🟢 An sèvis' : '⚪ Pa an sèvis'}</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+        <button onclick="toggleDisponib('${l.id}', ${!l.disponib})" style="background:${l.disponib ? '#E4F5EA' : '#FBE7E7'};color:${l.disponib ? '#237443' : '#B4270F'};border:none;padding:6px 10px;border-radius:6px;font-size:11.5px;font-weight:700;cursor:pointer;">${l.disponib ? 'Disponib' : 'Okipe'}</button>
+        <button onclick="copyLivreurLink('${l.id}')" style="background:#EDE6D8;border:none;padding:6px 10px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;">Kopye lyen swivi</button>
+        <button class="del-btn" onclick="removeLivreur('${l.id}')">Efase</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.toggleDisponib = async function(id, newVal){
+  try {
+    await updateDoc(doc(db, "livreurs", id), { disponib: newVal, updatedAt: new Date().toISOString(), updatedBy: currentUser.uid });
+    loadLivreurs();
+  } catch(e) {
+    alert("Erè pandan chanjman disponibilite a.");
+  }
+};
+
+window.copyLivreurLink = function(id){
+  const link = window.location.origin + '/livreur-suivi.html?id=' + id;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(()=> showToast('Lyen kopye! Voye l bay livrè a.'));
+  } else {
+    prompt('Kopye lyen sa a pou livrè a:', link);
+  }
+};
+
+window.removeLivreur = async function(id){
+  if (!confirm("Efase livrè sa a?")) return;
+  await deleteDoc(doc(db, "livreurs", id));
+  loadLivreurs();
+};
+
+window.assignLivreur = async function(orderId, livreurId){
+  try {
+    const orderRef = doc(db, 'commandes', orderId);
+    const orderSnap = await getDoc(orderRef);
+    if (!orderSnap.exists()) throw new Error('ORDER_NOT_FOUND');
+    const o = orderSnap.data();
+    if (o.vendeurId !== currentUser.uid) throw new Error('NOT_OWNER');
+    const now = new Date().toISOString();
+    const batch = writeBatch(db);
+
+    if (!livreurId) {
+      batch.update(orderRef, {livreurId:null, livreurNumero:null, livreurNom:null, liezon:null, livreurAssignedBy:null, livreurAssignedAt:null});
+      batch.set(doc(db,'livraison_suivi',orderId), {orderId, numeroKomand:o.numeroKomand||orderId.substring(0,8), clientId:o.clientId||null, clientNom:o.clientNom||null, adresse:o.adresse||null, latitude:o.latitude||null, longitude:o.longitude||null, vendeurId:currentUser.uid, livreurId:null, actif:false, updatedAt:now}, {merge:true});
+      await batch.commit();
+      showToast('Lyen livrè retire.');
+      return loadVendorData();
+    }
+
+    const l = myLivreurs.find(x => x.id === livreurId);
+    if (!l) throw new Error('DRIVER_NOT_FOUND');
+    batch.update(orderRef, {
+      livreurId:l.id, livreurNumero:l.numero, livreurNom:l.nom,
+      liezon:`${l.numero}-${o.numeroKomand || orderId.substring(0,8)}`,
+      livreurAssignedBy:currentUser.uid, livreurAssignedAt:now,
+      statut: ['an tann','konfime','aksepte','ap prepare','pare'].includes(o.statut||'an tann') ? 'asiyen livrè' : (o.statut||'asiyen livrè'),
+      lastStatusAt: ['an tann','konfime','aksepte','ap prepare','pare'].includes(o.statut||'an tann') ? now : (o.lastStatusAt||now),
+      lastStatusBy: ['an tann','konfime','aksepte','ap prepare','pare'].includes(o.statut||'an tann') ? currentUser.uid : (o.lastStatusBy||currentUser.uid)
+    });
+    batch.set(doc(db,'livraison_suivi',orderId), {
+      orderId, numeroKomand:o.numeroKomand||orderId.substring(0,8), clientId:o.clientId||null, clientNom:o.clientNom||null, adresse:o.adresse||null, latitude:o.latitude||null, longitude:o.longitude||null, vendeurId:currentUser.uid, livreurId:l.id, livreurNumero:l.numero, livreurNom:l.nom,
+      statut: ['an tann','konfime','aksepte','ap prepare','pare'].includes(o.statut||'an tann') ? 'asiyen livrè' : (o.statut||'asiyen livrè'),
+      actif:true, updatedAt:now, createdAt:now
+    }, {merge:true});
+    if (o.clientId) batch.set(doc(db,'notifications',`${orderId}_driver_${Date.now()}`), {
+      type:'delivery_assigned', clientId:o.clientId, vendeurId:currentUser.uid, orderId, livreurId:l.id, livreurNom:l.nom,
+      numeroKomand:o.numeroKomand||orderId.substring(0,8), read:false, createdAt:now, messagePreview:`Livrè ${l.nom} asiyen pou kòmand ou.`
+    });
+    await batch.commit();
+    showToast(`✓ ${l.nom} asiyen. Swivi kliyan an prepare.`);
+    loadVendorData();
+  } catch(e) {
+    const m={ORDER_NOT_FOUND:'Kòmand lan pa egziste.',NOT_OWNER:'Kòmand sa a pa pou boutik sa a.',DRIVER_NOT_FOUND:'Livrè a pa jwenn.'};
+    alert(m[e.message]||'Erè pandan asiyen livrè a.');
+  }
+};
+
+window.copyOrderDriverLink = function(orderId, livreurId){
+  if(!livreurId) return;
+  const link=window.location.origin+'/livreur-suivi.html?id='+encodeURIComponent(livreurId)+'&order='+encodeURIComponent(orderId);
+  if(navigator.clipboard) navigator.clipboard.writeText(link).then(()=>showToast('Lyen espesifik kòmand lan kopye.')); else prompt('Kopye lyen pou livrè a:',link);
+};
+
+// ---------- COMMUNICATION SANTRAL M.C ----------
+function normalizeContactPhone(phone){
+  let s=String(phone || '').trim().replace(/[^0-9+]/g,'');
+  if(/^\d{8}$/.test(s)) s='+509'+s;
+  if(/^509\d{8}$/.test(s)) s='+'+s;
+  if(/^00/.test(s)) s='+'+s.slice(2);
+  return s;
+}
+function whatsappContactPhone(phone){ return normalizeContactPhone(phone).replace(/\D/g,''); }
+async function loadMCCentralContact(){
+  const display=document.getElementById('mc-central-phone-display');
+  const call=document.getElementById('mc-central-call');
+  const sms=document.getElementById('mc-central-sms');
+  const wa=document.getElementById('mc-central-whatsapp');
+  if(!display) return;
+  try{
+    const snap=await getDoc(doc(db,'parametres','plateforme'));
+    const phone=snap.exists() ? (snap.data().mcCentralPhone || '') : '';
+    const clean=normalizeContactPhone(phone);
+    if(!clean){ display.textContent='Nimewo santral poko konfigire.'; return; }
+    display.textContent='Santral M.C: '+phone;
+    call.disabled=sms.disabled=wa.disabled=false;
+    call.onclick=()=>window.location.href='tel:'+clean;
+    sms.onclick=()=>window.location.href='sms:'+clean;
+    wa.onclick=()=>window.open('https://wa.me/'+whatsappContactPhone(clean),'_blank','noopener');
+  }catch(e){
+    console.warn('Nimewo santral M.C:',e);
+    display.textContent='Nimewo santral pa disponib pou kounye a.';
+  }
+}
+
+// ---------- MESSAJ ----------
+let myConversations = [];
+let activeConvId = null;
+let vendorMessagesUnsubscribe = null;
+
+async function loadConversations(){
+  const list = document.getElementById('conv-list');
+  const empty = document.getElementById('conv-empty');
+  try {
+    const q = query(collection(db, "conversations"), where("vendeurId", "==", currentUser.uid));
+    onSnapshot(q, (snap)=>{
+      myConversations = [];
+      snap.forEach(d => myConversations.push({ id: d.id, ...d.data() }));
+      myConversations.sort((a,b)=> new Date(b.lastMessageAt||0) - new Date(a.lastMessageAt||0));
+      if (myConversations.length === 0) { empty.style.display='block'; list.innerHTML=''; return; }
+      empty.style.display='none';
+      list.innerHTML = myConversations.map(c => `
+        <div class="conv-item ${c.id===activeConvId?'active':''}" onclick="openConversation('${c.id}')">
+          <strong>${c.clientNom || c.adminNom || 'M.C Marketplace — Administration'}</strong>
+          <span>${c.produitNom || ''}</span>
+        </div>
+      `).join('');
+    }, (err)=>{
+      console.error('Konvèsasyon vandè:', err);
+      empty.style.display='block';
+      empty.textContent='⚠️ Nou pa kapab chaje mesaj yo. Verifye Firestore Rules yo.';
+    });
+  } catch(e) {
+    console.error(e);
+    empty.style.display='block';
+    empty.textContent='⚠️ Erè pandan chajman mesaj yo.';
+  }
+}
+
+function escapeHtml(value){const d=document.createElement('div');d.textContent=String(value??'');return d.innerHTML;}
+
+window.openConversation = function(convId){
+  activeConvId = convId;
+  document.querySelectorAll('.conv-item').forEach(el => el.classList.remove('active'));
+  loadConversations();
+
+  const conv = myConversations.find(c => c.id === convId);
+  const inputArea = document.getElementById('vendor-chat-input-area');
+  inputArea.style.display = 'flex';
+
+  if (vendorMessagesUnsubscribe) vendorMessagesUnsubscribe();
+  const messagesRef = collection(db, "conversations", convId, "messages");
+  const q = query(messagesRef, orderBy("date", "asc"));
+  vendorMessagesUnsubscribe = onSnapshot(q, (snap)=>{
+    const msgs = [];
+    snap.forEach(d => msgs.push(d.data()));
+    const box = document.getElementById('vendor-chat-messages');
+    if (msgs.length === 0) {
+      box.innerHTML = '<div style="color:var(--gris);font-size:13px;text-align:center;padding:30px 0;">Pa gen mesaj ankò.</div>';
+    } else {
+      box.innerHTML = msgs.map(m => `
+        <div style="margin-bottom:10px;display:flex;${m.expediteurType==='vandè' ? 'justify-content:flex-end;' : ''}">
+          <div style="max-width:75%;background:${m.expediteurType==='vandè' ? 'var(--nuit-deep)' : '#F0ECE3'};color:${m.expediteurType==='vandè' ? '#fff' : 'var(--texte)'};padding:8px 12px;border-radius:10px;font-size:13.5px;">
+            ${m.texte}
+          </div>
+        </div>
+      `).join('');
+      box.scrollTop = box.scrollHeight;
+    }
+  });
+
+  document.getElementById('vendor-chat-send-btn').onclick = ()=> sendVendorReply(convId);
+  document.getElementById('vendor-chat-input').onkeypress = (e)=>{
+    if (e.key === 'Enter') sendVendorReply(convId);
+  };
+};
+
+async function sendVendorReply(convId){
+  const input = document.getElementById('vendor-chat-input');
+  const texte = input.value.trim();
+  if (!texte) return;
+  input.value = '';
+  try {
+    await setDoc(doc(db, "conversations", convId), {
+      lastMessage: texte,
+      lastMessageAt: new Date().toISOString()
+    }, { merge: true });
+    await addDoc(collection(db, "conversations", convId, "messages"), {
+      expediteurId: currentUser.uid,
+      expediteurType: 'vandè',
+      texte,
+      date: new Date().toISOString()
+    });
+    const conv = myConversations.find(c => c.id === convId);
+    if (conv?.clientId || conv?.adminId) {
+      try {
+        const payload = {
+          type:'new_message', vendeurId:currentUser.uid,
+          conversationId:convId, read:false, createdAt:new Date().toISOString(),
+          messagePreview:texte.slice(0,120)
+        };
+        if (conv.adminId) payload.adminId = conv.adminId;
+        else payload.clientId = conv.clientId;
+        await setDoc(doc(db,'notifications',`${convId}_message_${Date.now()}`), payload);
+      } catch(e) { console.warn('Notification message destinataire non créée:', e); }
+    }
+  } catch(e) {
+    alert('Erè pandan voye repons lan.');
+  }
+}
+
+// ---------- POZISYON BOUTIK ----------
+function updateShopLocationStatus(){
+  const statusEl = document.getElementById('shop-location-status');
+  if (!statusEl) return;
+  if (currentVendorData.lat && currentVendorData.lng) {
+    statusEl.textContent = '✓ Pozisyon boutik ou anrejistre — frè livrezon ap kalkile selon distans.';
+    statusEl.style.color = 'var(--vert)';
+  } else {
+    statusEl.textContent = 'Pozisyon poko anrejistre — frè livrezon ap rete yon pri fiks pou kounye a.';
+    statusEl.style.color = 'var(--gris)';
+  }
+}
+
+window.enrejistrePozisyonBoutik = async function(){
+  const statusEl = document.getElementById('shop-location-status');
+  if (!window.MCGPS) return;
+  statusEl.textContent = 'N ap chèche pozisyon GPS ki pi presi a...';
+  try {
+    const gps = await MCGPS.locateDetailed({enableHighAccuracy:true, timeout:20000, maximumAge:3000});
+    const a=gps.address||{};
+    await updateDoc(doc(db, "vendeurs", currentUser.uid), {
+      lat:gps.lat, lng:gps.lng, gpsAccuracy:gps.accuracy, gpsAltitude:gps.altitude,
+      gpsHeading:gps.heading, gpsSpeed:gps.speed, gpsIsMoving:gps.isMoving,
+      gpsAddress:gps.address?.fullAddress||null, gpsCountry:a.country||null,
+      gpsDepartment:a.department||null, gpsCity:a.city||null, gpsNeighborhood:a.neighborhood||null,
+      gpsStreet:a.street||null, gpsHouseNumber:a.houseNumber||null,
+      gpsUpdatedAt:gps.capturedAt, updatedAt:new Date().toISOString(), updatedBy:currentUser.uid
+    });
+    currentVendorData.lat=gps.lat; currentVendorData.lng=gps.lng;
+    currentVendorData.gpsAccuracy=gps.accuracy;
+    await syncPublicVendor(currentVendorData);
+    updateShopLocationStatus();
+    statusEl.innerHTML=`✓ ${MCGPS.formatAddress(gps)}<br>${MCGPS.accuracyLabel(gps.accuracy)}`;
+    showToast('Pozisyon boutik anrejistre ak detay GPS yo!');
+  } catch(e) {
+    statusEl.textContent = 'Otorize lokalizasyon presi a pou anrejistre pozisyon boutik la.';
+  }
+};
+</script>
+
+<!-- M.C V3.3 device notification -->
+<script>window.enableMCDeviceNotifications=async function(){try{const u=currentUser;if(!u)throw new Error('AUTH_REQUIRED');const token=await window.MCNotifications.enable({uid:u.uid,db,doc:window._fb.doc,setDoc:window._fb.setDoc,getToken:(await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js')).getToken,getMessaging:(await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js')).getMessaging,initializeApp:(await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js')).initializeApp,firebaseConfig});alert('Notifications appareil activées.');return token;}catch(e){alert('Notifications appareil: '+(e.message||'erreur'));}};</script>
+<script type="module" src="mc-analytics.js"></script>
+<script src="mc-seo.js"></script>
+</body>
+</html>
