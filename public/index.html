@@ -1,1 +1,859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.C Marketplace — Achte lokal, resevwa vit</title>
+<meta name="description" content="M.C Marketplace — marketplace ayisyen pou achte pwodwi ak sèvis lokal, jwenn vandè, restoran ak livrezon.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#141414">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="M.C Marketplace">
+<style>
+  :root{
+    --nuit:#141414;
+    --nuit-deep:#000000;
+    --or:#E8B84B;
+    --or-deep:#B8902E;
+    --corail:#E8B84B;
+    --creme:#F7F3EC;
+    --blanc:#FFFFFF;
+    --texte:#1A2733;
+    --gris:#6B7785;
+    --ligne:#E4DFD3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+  body{animation:fadeIn 0.5s ease;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--creme);
+    color:var(--texte);
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{
+    font-family:'Sora',-apple-system,sans-serif;
+    letter-spacing:-0.01em;
+  }
 
+  /* ---------- HEADER ---------- */
+  header{
+    background:var(--nuit);
+    color:var(--blanc);
+  }
+  .top-bar{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:14px 20px;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .logo{
+    font-family:'Sora',sans-serif;
+    font-weight:700;
+    font-size:22px;
+    color:var(--or);
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .logo span{color:var(--blanc);}
+  .search-wrap{
+    flex:1;
+    display:flex;
+    background:var(--blanc);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .search-wrap input{
+    flex:1;
+    border:none;
+    padding:11px 14px;
+    font-size:15px;
+    color:var(--texte);
+    outline:none;
+    min-width:0;
+  }
+  .search-wrap button{
+    background:var(--or);
+    border:none;
+    padding:0 18px;
+    cursor:pointer;
+    font-size:16px;
+    color:var(--nuit-deep);
+    font-weight:700;
+  }
+  .cart-icon{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .wallet-mini{display:flex;align-items:center;gap:6px;background:rgba(232,184,75,.12);border:1px solid rgba(232,184,75,.45);color:#F5D98B;padding:7px 10px;border-radius:9px;text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;}
+  .wallet-mini .wallet-amount{color:#fff;font-weight:800;}
+  @media(max-width:600px){.wallet-mini{order:2;padding:6px 8px;font-size:11px;margin-left:auto;}.wallet-mini .wallet-label{display:none;}.top-bar>a[href="compte.html"]{order:2;}.cart-icon{order:2;margin-left:0;}}
+  .cart-icon .badge{
+    background:var(--corail);
+    color:var(--nuit-deep);
+    border-radius:999px;
+    padding:1px 7px;
+    font-size:12px;
+  }
+  .cat-bar{
+    background:var(--nuit-deep);
+    overflow-x:auto;
+    white-space:nowrap;
+    padding:9px 20px;
+    scrollbar-width:none;
+  }
+  .cat-bar::-webkit-scrollbar{display:none;}
+  .cat-bar a{
+    color:#C8D1DB;
+    text-decoration:none;
+    font-size:13.5px;
+    margin-right:22px;
+    padding-bottom:2px;
+  }
+  .cat-bar a:hover{color:var(--or);border-bottom:2px solid var(--or);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(135deg,var(--nuit) 0%,var(--nuit-deep) 100%);
+    color:var(--blanc);
+    padding:52px 20px 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    right:-60px;top:-60px;
+    width:280px;height:280px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(232,163,61,0.18) 0%,transparent 70%);
+  }
+  .hero-inner{
+    max-width:1200px;
+    margin:0 auto;
+    position:relative;
+  }
+  .hero-eyebrow{
+    color:var(--or);
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .hero h1{
+    font-size:clamp(28px,5vw,44px);
+    font-weight:700;
+    max-width:560px;
+    line-height:1.15;
+    margin-bottom:14px;
+  }
+  .hero p{
+    color:#C8D1DB;
+    font-size:16px;
+    max-width:480px;
+    margin-bottom:24px;
+  }
+  .hero-cta{
+    display:inline-block;
+    background:var(--corail);
+    color:var(--nuit-deep);
+    padding:13px 26px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:15px;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{
+    max-width:1200px;
+    margin:0 auto;
+    padding:44px 20px;
+  }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:22px;
+  }
+  .section-head h2{
+    font-size:22px;
+    font-weight:700;
+  }
+  .section-head a{
+    color:var(--corail);
+    font-size:14px;
+    font-weight:600;
+    text-decoration:none;
+  }
+
+  /* Category tiles */
+  .cat-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:14px;
+  }
+  .cat-tile{
+    background:var(--blanc);
+    border:1px solid var(--ligne);
+    border-radius:10px;
+    padding:18px 12px;
+    text-align:center;
+    cursor:pointer;
+  }
+  .cat-tile .icon{
+    width:44px;height:44px;
+    margin:0 auto 10px;
+    border-radius:50%;
+    background:#EDE6D8;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+  }
+  .cat-tile span{
+    font-size:13px;
+    font-weight:600;
+    color:var(--texte);
+  }
+
+  /* Product grid */
+  .prod-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:18px;
+  }
+  .prod-card{
+    background:var(--blanc);
+    border:1px solid var(--ligne);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .prod-img{
+    height:140px;
+    background:#EDE6D8;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;
+    color:var(--gris);
+  }
+  .prod-body{padding:12px 14px 16px;}
+  .prod-body .name{
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:6px;
+    min-height:36px;
+  }
+  .prod-body .price{
+    font-size:16px;
+    font-weight:700;
+    color:var(--nuit);
+  }
+  .prod-body .price small{
+    font-size:12px;
+    color:var(--gris);
+    font-weight:400;
+  }
+  .prod-body .loc{
+    font-size:11.5px;
+    color:var(--gris);
+    margin-top:4px;
+  }
+
+  /* Trust strip */
+  .trust{
+    background:var(--blanc);
+    border-top:1px solid var(--ligne);
+    border-bottom:1px solid var(--ligne);
+  }
+  .trust-inner{
+    max-width:1200px;
+    margin:0 auto;
+    padding:28px 20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+  }
+  .trust-item{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .trust-item .num{
+    font-family:'Sora',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--or-deep);
+  }
+  .trust-item p{
+    font-size:13px;
+    color:var(--gris);
+  }
+  .trust-item strong{
+    display:block;
+    font-size:14px;
+    color:var(--texte);
+    margin-bottom:2px;
+  }
+
+  footer{
+    background:var(--nuit-deep);
+    color:#9FADBC;
+    padding:36px 20px 24px;
+    font-size:13px;
+  }
+  .footer-inner{
+    max-width:1200px;
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:24px;
+  }
+  .footer-col strong{
+    display:block;
+    color:var(--blanc);
+    margin-bottom:10px;
+    font-size:14px;
+  }
+  .footer-col div{margin-bottom:6px;cursor:pointer;}
+  .footer-bottom{
+    max-width:1200px;
+    margin:28px auto 0;
+    padding-top:18px;
+    border-top:1px solid #22344A;
+    font-size:12px;
+  }
+
+  @media (max-width:640px){
+    .top-bar{flex-wrap:wrap;}
+    .logo{order:1;}
+    .cart-icon{order:2;margin-left:auto;}
+    .search-wrap{order:3;flex:1 0 100%;}
+  }
+</style>
+<script src="mc-notifications-v3.3.js"></script>
+</head>
+<body>
+
+<header>
+  <div id="install-banner" style="display:none;background:var(--or);color:var(--nuit-deep);text-align:center;padding:8px 16px;font-size:12.5px;font-weight:600;cursor:pointer;">
+    📲 Enstale M.C Marketplace kòm yon app — Tape la a
+  </div>
+  <div class="top-bar">
+    <div class="logo">M.C <span>Marketplace</span></div>
+    <div class="search-wrap" style="position:relative;">
+      <input type="text" id="search-input" placeholder="Chèche yon pwodwi... (ex: telefòn, soulye, diri)" autocomplete="off">
+      <button>Chèche</button>
+      <div id="search-suggestions" style="display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border-radius:8px;margin-top:4px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:50;max-height:280px;overflow-y:auto;"></div>
+    </div>
+    <a href="compte.html" style="color:#C8D1DB;font-size:13px;text-decoration:none;white-space:nowrap;">Kont mwen</a>
+    <a class="wallet-mini" id="wallet-mini" href="wallet.html" title="M.C Wallet">
+      💳 <span class="wallet-label">M.C Wallet · Bientôt</span> <span class="wallet-amount" id="wallet-mini-amount">0 HTG</span>
+    </a>
+    <div class="cart-icon" onclick="toggleCart()">
+      🛒 Panier <span class="badge" id="cart-badge">0</span>
+    </div>
+  </div>
+  <div class="cat-bar">
+    <a href="#" data-cat="">Tout kategori</a>
+    <a href="#" data-cat="Elektwonik">Elektwonik</a>
+    <a href="#" data-cat="Mòd & Abiman">Mòd &amp; Abiman</a>
+    <a href="#" data-cat="Kay & Kwizin">Kay &amp; Kwizin</a>
+    <a href="#" data-cat="Bote & Sante">Bote &amp; Sante</a>
+    <a href="#" data-cat="Manje & Boutèy">Manje &amp; Boutèy</a>
+    <a href="#" data-cat="Zouti & Konstriksyon">Zouti &amp; Konstriksyon</a>
+    <a href="#" data-cat="Timoun & Jwèt">Timoun &amp; Jwèt</a>
+    <a href="restaurants.html">🍽 Restoran</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Livrezon nan tout peyi a</div>
+    <h1>Tout sa w bezwen, nan men machann lokal.</h1>
+    <p>Achte nan men vandè peyi a — nan Pòtoprens, Okap, Jakmèl osnon nenpòt vil — epi resevwa lakay ou.</p>
+    <a href="#" class="hero-cta">Kòmanse achte</a>
+  </div>
+</div>
+
+<section>
+  <div class="section-head">
+    <h2>Pa kategori</h2>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-tile" data-cat="Elektwonik"><div class="icon">📱</div><span>Elektwonik</span></div>
+    <div class="cat-tile" data-cat="Mòd & Abiman"><div class="icon">👕</div><span>Abiman</span></div>
+    <div class="cat-tile" data-cat="Kay & Kwizin"><div class="icon">🏠</div><span>Kay</span></div>
+    <div class="cat-tile" data-cat="Bote & Sante"><div class="icon">💄</div><span>Bote</span></div>
+    <div class="cat-tile" data-cat="Manje & Boutèy"><div class="icon">🍚</div><span>Manje</span></div>
+    <div class="cat-tile" data-cat="Zouti & Konstriksyon"><div class="icon">🧰</div><span>Zouti</span></div>
+  </div>
+</section>
+
+<section id="products-section">
+  <div class="section-head">
+    <h2 id="products-title">Popilè kounye a</h2>
+    <a href="#" id="clear-filter" style="display:none;">Wè tout →</a>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+    <select id="sort-select" style="padding:9px 12px;border-radius:8px;border:1px solid var(--ligne);font-size:13px;background:#fff;">
+      <option value="">Klasman: Pi popilè</option>
+      <option value="prix-asc">Pri: Ba → Wo</option>
+      <option value="prix-desc">Pri: Wo → Ba</option>
+      <option value="recent">Pi resan</option>
+    </select>
+    <input type="number" id="filter-prix-min" placeholder="Pri min" style="width:100px;padding:9px 12px;border-radius:8px;border:1px solid var(--ligne);font-size:13px;">
+    <input type="number" id="filter-prix-max" placeholder="Pri max" style="width:100px;padding:9px 12px;border-radius:8px;border:1px solid var(--ligne);font-size:13px;">
+    <button id="apply-filters-btn" style="padding:9px 16px;border-radius:8px;border:none;background:var(--nuit);color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Filtre</button>
+  </div>
+  <div class="prod-grid" id="prod-grid">
+    <div style="padding:40px 0;text-align:center;color:var(--gris);grid-column:1/-1;">Chajman pwodwi yo...</div>
+  </div>
+</section>
+  </div>
+</section>
+
+<section id="recent-section" style="display:none;">
+  <div class="section-head">
+    <h2>Ou te gade dènyèman</h2>
+    <button id="clear-recent-btn" type="button" style="border:0;background:none;color:var(--corail);font-size:13px;font-weight:700;cursor:pointer;">Netwaye</button>
+  </div>
+  <div id="recent-grid" class="prod-grid"></div>
+</section>
+
+<div class="trust">
+  <div class="trust-inner">
+    <div class="trust-item">
+      <div class="num">100%</div>
+      <p><strong>Vandè lokal</strong>Chak pwodwi soti nan yon biznis ayisyen.</p>
+    </div>
+    <div class="trust-item">
+      <div class="num">10</div>
+      <p><strong>Depatman kouvri</strong>Livrezon disponib nan tout peyi a.</p>
+    </div>
+    <div class="trust-item">
+      <div class="num">24/7</div>
+      <p><strong>Sipò kliyan</strong>Ekip la la pou reponn kesyon w yo.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <strong>M.C Marketplace</strong>
+      <div><a href="conditions.html" style="color:inherit;text-decoration:none;">Kondisyon itilizasyon</a></div>
+      <div><a href="confidentialite.html" style="color:inherit;text-decoration:none;">Politik konfidansyalite</a></div>
+      <div><a href="contact.html" style="color:inherit;text-decoration:none;">Kontakte nou</a></div>
+      <div><a href="support.html" style="color:inherit;text-decoration:none;">Sipò / Tikè</a></div>
+    </div>
+    <div class="footer-col">
+      <strong>Pou kliyan</strong>
+      <div><a href="compte.html" style="color:inherit;text-decoration:none;">Swiv kòmand mwen</a></div>
+      <div><a href="retours.html" style="color:inherit;text-decoration:none;">Livrezon &amp; retou</a></div>
+      <div><a href="faq.html" style="color:inherit;text-decoration:none;">Kesyon frekan</a></div>
+    </div>
+    <div class="footer-col">
+      <strong>Vin vandè</strong>
+      <div><a href="vendeur.html" style="color:inherit;text-decoration:none;">Louvri yon boutik</a></div>
+      <div><a href="guide-vendeur.html" style="color:inherit;text-decoration:none;">Gid vandè</a></div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 M.C Marketplace — Fèt ann Ayiti, pou Ayiti.</div>
+</footer>
+
+<!-- ===================== PANIER (glissant) ===================== -->
+<div id="cart-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;" onclick="toggleCart()"></div>
+<div id="cart-panel" style="display:none;position:fixed;top:0;right:0;bottom:0;width:min(360px,90vw);background:#fff;z-index:101;box-shadow:-4px 0 20px rgba(0,0,0,0.15);flex-direction:column;" aria-hidden="true" role="dialog" aria-label="Panier">
+  <div style="padding:18px 20px;border-bottom:1px solid #E4DFD3;display:flex;justify-content:space-between;align-items:center;">
+    <strong style="font-size:16px;">Panye ou</strong>
+    <button type="button" onclick="toggleCart()" aria-label="Fèmen panye a" title="Fèmen panye a" style="background:none;border:none;font-size:24px;line-height:1;cursor:pointer;padding:4px 8px;">×</button>
+  </div>
+  <div id="cart-items" style="flex:1;overflow-y:auto;padding:14px 20px;"></div>
+  <div style="padding:16px 20px;border-top:1px solid #E4DFD3;">
+    <div style="display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px;">
+      <span>Total</span><span id="cart-total">0 G</span>
+    </div>
+    <button style="width:100%;background:#D64545;color:#fff;border:none;padding:13px;border-radius:8px;font-weight:700;cursor:pointer;" onclick="window.location.href='commande.html'">Kòmande</button>
+  </div>
+</div>
+
+<script type="module">
+const firebaseConfig = {
+  apiKey: "AIzaSyB_1RmQ3t-8Zzpg-mirSCv59KrioDsmjT8",
+  authDomain: "mc-marketplaceht.firebaseapp.com",
+  projectId: "mc-marketplaceht",
+  storageBucket: "mc-marketplaceht.firebasestorage.app",
+  messagingSenderId: "788708293876",
+  appId: "1:788708293876:web:09922c1e17ed6f51a2b2a1"
+};
+
+const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+const { getAuth, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+const { getFirestore, collection, getDocs, query, where, addDoc, deleteDoc, doc, onSnapshot, limit } =
+  await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+function formatWalletAmount(value){
+  const n=Number(value);
+  return (Number.isFinite(n)?n:0).toLocaleString('fr-FR')+' HTG';
+}
+
+let stopWalletMini = null;
+onAuthStateChanged(auth, user => {
+  if (stopWalletMini) { stopWalletMini(); stopWalletMini = null; }
+  const el=document.getElementById('wallet-mini-amount');
+  if (!el) return;
+  if (!user) { el.textContent='0 HTG'; return; }
+  stopWalletMini = onSnapshot(doc(db,'wallets',user.uid), snap => {
+    const w=snap.exists()?snap.data():{};
+    el.textContent=formatWalletAmount(w.availableBalance ?? w.balance ?? 0);
+  }, () => { el.textContent='0 HTG'; });
+});
+
+let allProducts = [];
+let cart = JSON.parse(localStorage.getItem('mc_cart') || '[]');
+let currentUser = null;
+let myFavoriIds = {};
+
+onAuthStateChanged(auth, (user)=>{
+  currentUser = user;
+  if (user) loadFavoris(); else { myFavoriIds = {}; markFavoris(); }
+});
+
+async function loadFavoris(){
+  if (!currentUser) return;
+  const q = query(collection(db, "favoris"), where("clientId", "==", currentUser.uid));
+  const snap = await getDocs(q);
+  myFavoriIds = {};
+  snap.forEach(d => { myFavoriIds[d.data().produitId] = d.id; });
+  markFavoris();
+}
+
+function markFavoris(){
+  document.querySelectorAll('[data-fav-id]').forEach(btn=>{
+    const pid = btn.dataset.favId;
+    btn.textContent = myFavoriIds[pid] ? '❤️' : '🤍';
+  });
+}
+
+window.toggleFavori = async function(productId, btnEl){
+  btnEl.dataset.favId = productId;
+  if (!currentUser) {
+    alert('Ou dwe konekte pou sove yon pwodwi nan favori ou.');
+    window.location.href = 'compte.html';
+    return;
+  }
+  try {
+    if (myFavoriIds[productId]) {
+      await deleteDoc(doc(db, "favoris", myFavoriIds[productId]));
+      delete myFavoriIds[productId];
+      btnEl.textContent = '🤍';
+    } else {
+      const p = allProducts.find(x => x.id === productId);
+      const ref = await addDoc(collection(db, "favoris"), {
+        clientId: currentUser.uid,
+        produitId: productId,
+        produitNom: p ? p.nom : '',
+        prix: p ? p.prix : 0,
+        imageUrl: p ? p.imageUrl : '',
+        dateAjout: new Date().toISOString()
+      });
+      myFavoriIds[productId] = ref.id;
+      btnEl.textContent = '❤️';
+    }
+  } catch(e) {
+    alert('Erè, eseye ankò.');
+  }
+};
+
+async function loadProducts(){
+  const grid = document.getElementById('prod-grid');
+  const started = Date.now();
+  try {
+    // Public catalogue: fetch a bounded first page so the homepage does not wait on the full collection.
+    // Pagination can be added later without changing the Firestore security model.
+    const snap = await Promise.race([
+      getDocs(query(collection(db, "produits"), limit(50))),
+      new Promise((_, reject) => setTimeout(() => reject(Object.assign(new Error('Firestore timeout'), { code: 'deadline-exceeded' })), 20000))
+    ]);
+    allProducts = [];
+    snap.forEach(d => allProducts.push({ id: d.id, ...d.data() }));
+    allProducts.sort((a,b) => String(b.createdAt || b.dateAjout || '').localeCompare(String(a.createdAt || a.dateAjout || '')));
+    renderProducts(allProducts);
+    const status = document.getElementById('catalog-status');
+    if (status) status.textContent = `Catalogue connecté • ${allProducts.length} produit(s) • ${Date.now()-started}ms`;
+  } catch(e) {
+    console.error('[M.C V4.0] catalogue error:', e);
+    grid.innerHTML = `<div style="padding:28px;text-align:center;color:#8a1c1c;grid-column:1/-1;background:#fff4f4;border:1px solid #f1cccc;border-radius:12px;">
+      <strong>Le catalogue n’a pas pu être chargé.</strong><br>
+      <small>Code: ${String(e?.code || 'unknown')} — ${String(e?.message || 'Erreur inconnue').slice(0,160)}</small><br>
+      <button id="catalog-retry" type="button" style="margin-top:12px;padding:9px 14px;border:0;border-radius:8px;cursor:pointer;">Réessayer</button>
+    </div>`;
+    const retry = document.getElementById('catalog-retry');
+    if (retry) retry.addEventListener('click', loadProducts);
+  }
+}
+window.loadProducts = loadProducts;
+
+function renderProducts(products){
+  const grid = document.getElementById('prod-grid');
+  if (products.length === 0) {
+    grid.innerHTML = '<div style="padding:40px 0;text-align:center;color:var(--gris);grid-column:1/-1;">Poko gen pwodwi nan kategori sa a.</div>';
+    return;
+  }
+  grid.innerHTML = products.map(p => {
+    const enRupture = p.stock != null && p.stock <= 0;
+    return `
+    <div class="prod-card">
+      <a href="produit.html?id=${p.id}" style="color:inherit;text-decoration:none;position:relative;display:block;">
+        <button data-fav-id="${p.id}" onclick="event.preventDefault(); toggleFavori('${p.id}', this)" style="position:absolute;top:8px;right:8px;z-index:2;background:rgba(255,255,255,0.9);border:none;border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer;">🤍</button>
+        <div class="prod-img">${p.imageUrl ? `<img src="${p.imageUrl}" style="width:100%;height:100%;object-fit:cover;${enRupture?'opacity:0.5;':''}" onerror="this.parentElement.textContent='Foto pwodwi'">` : 'Foto pwodwi'}</div>
+        <div class="prod-body">
+          <div class="name">${p.nom}</div>
+          ${enRupture ? `<div style="font-size:11px;color:#B4270F;font-weight:700;margin-bottom:3px;">⚠️ Pa gen stock</div>` : (p.tanPreparasyon ? `<div style="font-size:11px;color:#B4740B;font-weight:600;margin-bottom:3px;">⏱ ${p.tanPreparasyon} min</div>` : '')}
+          <div class="price">${Number(p.prix).toLocaleString('fr-FR')} G <small>HTG</small></div>
+          <div class="loc">Vandè: ${p.vendeurVille || p.vendeurNom || '—'}</div>
+        </div>
+      </a>
+      <div class="prod-body" style="padding-top:0;">
+        ${enRupture
+          ? `<button disabled style="margin-top:4px;width:100%;background:#DDD;color:#888;border:none;padding:8px;border-radius:6px;font-size:12.5px;font-weight:600;">Pa gen stock</button>`
+          : `<button onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&apos;")})' style="margin-top:4px;width:100%;background:var(--nuit);color:#fff;border:none;padding:8px;border-radius:6px;font-size:12.5px;font-weight:600;cursor:pointer;">Ajoute nan panye</button>`
+        }
+      </div>
+    </div>
+  `;
+  }).join('');
+  markFavoris();
+}
+
+// Category filter
+document.querySelectorAll('[data-cat]').forEach(el => {
+  el.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const cat = el.dataset.cat;
+    if (!cat) {
+      renderProducts(allProducts);
+      document.getElementById('products-title').textContent = 'Popilè kounye a';
+      document.getElementById('clear-filter').style.display = 'none';
+    } else {
+      renderProducts(cat === 'Restoran' ? allProducts.filter(p => p.vendeurType === 'restoran') : allProducts.filter(p => p.categorie === cat));
+      document.getElementById('products-title').textContent = cat;
+      document.getElementById('clear-filter').style.display = 'inline';
+    }
+    document.getElementById('products-section').scrollIntoView({behavior:'smooth'});
+  });
+});
+
+document.getElementById('clear-filter').addEventListener('click', (e)=>{
+  e.preventDefault();
+  renderProducts(allProducts);
+  document.getElementById('products-title').textContent = 'Popilè kounye a';
+  document.getElementById('clear-filter').style.display = 'none';
+});
+
+// Tri ak filtè pri
+document.getElementById('apply-filters-btn').addEventListener('click', ()=>{
+  let result = [...allProducts];
+  const min = document.getElementById('filter-prix-min').value;
+  const max = document.getElementById('filter-prix-max').value;
+  if (min !== '') result = result.filter(p => Number(p.prix) >= Number(min));
+  if (max !== '') result = result.filter(p => Number(p.prix) <= Number(max));
+
+  const sortVal = document.getElementById('sort-select').value;
+  if (sortVal === 'prix-asc') result.sort((a,b)=> Number(a.prix) - Number(b.prix));
+  else if (sortVal === 'prix-desc') result.sort((a,b)=> Number(b.prix) - Number(a.prix));
+  else if (sortVal === 'recent') result.sort((a,b)=> new Date(b.dateAjout||0) - new Date(a.dateAjout||0));
+
+  renderProducts(result);
+  document.getElementById('products-title').textContent = 'Rezilta filtre';
+  document.getElementById('clear-filter').style.display = 'inline';
+});
+
+// Search
+document.querySelector('.search-wrap button').addEventListener('click', ()=>{
+  const term = document.getElementById('search-input').value.toLowerCase().trim();
+  document.getElementById('search-suggestions').style.display = 'none';
+  if (!term) {
+    renderProducts(allProducts);
+    document.getElementById('products-title').textContent = 'Popilè kounye a';
+    return;
+  }
+  renderProducts(allProducts.filter(p => String(p.nom || '').toLowerCase().includes(term)));
+  document.getElementById('products-title').textContent = `Rechèch: ${term}`;
+  document.getElementById('clear-filter').style.display = 'inline';
+  document.getElementById('products-section').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('search-input').addEventListener('keydown', (e)=>{
+  if (e.key === 'Enter') document.querySelector('.search-wrap button').click();
+});
+
+// Sijesyon rechèch an dirèk
+document.getElementById('search-input').addEventListener('input', (e)=>{
+  const term = e.target.value.toLowerCase().trim();
+  const box = document.getElementById('search-suggestions');
+  if (!term) { box.style.display = 'none'; return; }
+  const matches = allProducts.filter(p => p.nom.toLowerCase().includes(term)).slice(0, 6);
+  if (matches.length === 0) { box.style.display = 'none'; return; }
+  box.innerHTML = matches.map(p => `
+    <div onclick="window.location.href='produit.html?id=${p.id}'" style="padding:10px 14px;border-bottom:1px solid #eee;cursor:pointer;font-size:13.5px;color:#1A2733;display:flex;justify-content:space-between;">
+      <span>${p.nom}</span>
+      <span style="color:#6B7785;">${Number(p.prix).toLocaleString('fr-FR')} G</span>
+    </div>
+  `).join('');
+  box.style.display = 'block';
+});
+document.addEventListener('click', (e)=>{
+  if (!e.target.closest('.search-wrap')) {
+    document.getElementById('search-suggestions').style.display = 'none';
+  }
+});
+
+// Hero CTA scrolls to products
+document.querySelector('.hero-cta').addEventListener('click', (e)=>{
+  e.preventDefault();
+  document.getElementById('products-section').scrollIntoView({behavior:'smooth'});
+});
+
+// ---------- CART ----------
+window.addToCart = function(product){
+  const key = JSON.stringify([product.id || null, product.optionsSelectionnees || []]);
+  const existing = cart.find(item => JSON.stringify([item.id || null, item.optionsSelectionnees || []]) === key);
+  if (existing) {
+    existing.quantite = Math.max(1, Number(existing.quantite || 1) + 1);
+  } else {
+    cart.push({...product, quantite: 1});
+  }
+  localStorage.setItem('mc_cart', JSON.stringify(cart));
+  updateCartBadge();
+};
+
+window.toggleCart = function(forceState){
+  const panel = document.getElementById('cart-panel');
+  const overlay = document.getElementById('cart-overlay');
+  const isOpen = panel.style.display === 'flex';
+  const nextOpen = typeof forceState === 'boolean' ? forceState : !isOpen;
+  panel.style.display = nextOpen ? 'flex' : 'none';
+  panel.setAttribute('aria-hidden', String(!nextOpen));
+  overlay.style.display = nextOpen ? 'block' : 'none';
+  if (nextOpen) renderCart();
+};
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') window.toggleCart(false);
+});
+
+function renderCart(){
+  const container = document.getElementById('cart-items');
+  if (cart.length === 0) {
+    container.innerHTML = '<div style="padding:30px 0;text-align:center;color:#6B7785;font-size:13px;">Panye ou vid.</div>';
+    document.getElementById('cart-total').textContent = '0 G';
+    return;
+  }
+  container.innerHTML = cart.map((item, i) => {
+    const qty = Math.max(1, Number(item.quantite || 1));
+    return `
+      <div style="padding:12px 0;border-bottom:1px solid #F0ECE3;">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
+          <div style="font-size:13px;min-width:0;">
+            <div style="font-weight:600;word-break:break-word;">${item.nom}</div>
+            <div style="color:#6B7785;">${Number(item.prix).toLocaleString('fr-FR')} G / inite</div>
+          </div>
+          <button onclick="removeFromCart(${i})" style="background:none;border:none;color:#D64545;font-size:12px;cursor:pointer;white-space:nowrap;">Retire</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:9px;">
+          <button type="button" onclick="changeCartQty(${i},-1)" aria-label="Diminye kantite" style="width:30px;height:30px;border:1px solid #D8D2C7;background:#fff;border-radius:7px;cursor:pointer;font-size:16px;">−</button>
+          <span style="min-width:26px;text-align:center;font-weight:700;">${qty}</span>
+          <button type="button" onclick="changeCartQty(${i},1)" aria-label="Ogmante kantite" style="width:30px;height:30px;border:1px solid #D8D2C7;background:#fff;border-radius:7px;cursor:pointer;font-size:16px;">+</button>
+          <span style="margin-left:auto;font-weight:700;">${(Number(item.prix)*qty).toLocaleString('fr-FR')} G</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+  const total = cart.reduce((sum, item) => sum + Number(item.prix) * Math.max(1, Number(item.quantite || 1)), 0);
+  document.getElementById('cart-total').textContent = total.toLocaleString('fr-FR') + ' G';
+}
+
+window.changeCartQty = function(index, delta){
+  const item = cart[index];
+  if (!item) return;
+  item.quantite = Math.max(1, Number(item.quantite || 1) + Number(delta || 0));
+  localStorage.setItem('mc_cart', JSON.stringify(cart));
+  updateCartBadge();
+  renderCart();
+};
+
+function updateCartBadge(){
+  document.getElementById('cart-badge').textContent = cart.reduce((n, item) => n + Math.max(1, Number(item.quantite || 1)), 0);
+}
+
+updateCartBadge();
+loadProducts();
+renderRecentlyViewed();
+
+function renderRecentlyViewed(){
+  const section = document.getElementById('recent-section');
+  const grid = document.getElementById('recent-grid');
+  if (!section || !grid) return;
+  let items = [];
+  try { items = JSON.parse(localStorage.getItem('mc_recent_products') || '[]'); } catch (_) { items = []; }
+  items = Array.isArray(items) ? items.slice(0,6) : [];
+  if (!items.length) { section.style.display='none'; return; }
+  section.style.display='block';
+  grid.innerHTML = items.map(p => `
+    <a href="produit.html?id=${encodeURIComponent(p.id)}" class="prod-card" style="color:inherit;text-decoration:none;">
+      <div class="prod-img">${p.imageUrl ? `<img src="${p.imageUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.textContent='Foto pwodwi'">` : 'Foto pwodwi'}</div>
+      <div class="prod-body">
+        <div class="name">${String(p.nom || 'Pwodwi')}</div>
+        <div class="price">${Number(p.prix || 0).toLocaleString('fr-FR')} G <small>HTG</small></div>
+        <div class="loc">${p.vendeurVille || p.vendeurNom || '—'}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+const clearRecentBtn = document.getElementById('clear-recent-btn');
+if (clearRecentBtn) clearRecentBtn.addEventListener('click', ()=>{
+  localStorage.removeItem('mc_recent_products');
+  renderRecentlyViewed();
+});
+
+// ---------- PWA INSTALL ----------
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').style.display = 'block';
+});
+
+document.getElementById('install-banner').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('install-banner').style.display = 'none';
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').style.display = 'none';
+});
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+
+<script type="module" src="mc-analytics.js"></script>
+<script src="mc-seo.js"></script>
+</body>
+</html>
