@@ -1,0 +1,29 @@
+M.C Marketplace V4.0.1
+
+Base:
+V4.0 frontend architecture preparation
+
+Repository:
+milleclatcorpgroup5-web/MC-MARKETPLACE-
+
+Branch:
+main
+
+Frontend:
+public/
+
+Configuration:
+wrangler.jsonc
+
+Icons:
+public/icons/icon-192.png
+public/icons/icon-512.png
+
+Payment:
+Deferred
+
+Status:
+Architecture prepared for deployment verification.
+
+Note:
+This file is a release marker. Application source code and deployment configuration must be verified before production release.
